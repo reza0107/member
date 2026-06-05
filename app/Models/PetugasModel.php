@@ -13,7 +13,7 @@ class PetugasModel extends Model
          'username',
          'password_hash',
          'is_superadmin',
-         'id_guru',
+         'id_member',
          'active'
       ];
    }
@@ -24,8 +24,8 @@ class PetugasModel extends Model
 
    public function getAllPetugas()
    {
-      return $this->select('users.*, tb_guru.nama_guru')
-         ->join('tb_guru', 'users.id_guru = tb_guru.id_guru', 'left')
+      return $this->select('users.*, tb_member.nama_member')
+         ->join('tb_member', 'users.id_member = tb_member.id_member', 'left')
          ->findAll();
    }
 
@@ -34,7 +34,7 @@ class PetugasModel extends Model
       return $this->where([$this->primaryKey => $id])->first();
    }
 
-   public function savePetugas($idPetugas, $email, $username, $passwordHash, $role, $id_guru = null, $active = 1)
+   public function savePetugas($idPetugas, $email, $username, $passwordHash, $role, $id_member = null, $active = 1)
    {
       return $this->save([
          $this->primaryKey => $idPetugas,
@@ -42,7 +42,7 @@ class PetugasModel extends Model
          'username' => $username,
          'password_hash' => $passwordHash,
          'is_superadmin' => $role ?? '0',
-         'id_guru' => $id_guru,
+         'id_member' => $id_member,
          'active' => $active
       ]);
    }
@@ -137,18 +137,18 @@ class PetugasModel extends Model
                $data['password_hash'] = \Myth\Auth\Password::hash($password);
 
                $data['is_superadmin'] = getCSVInputValue($item, 'role', 'int'); // 1 or 0
-               $idGuru = getCSVInputValue($item, 'id_guru', 'int');
+               $idmember = getCSVInputValue($item, 'id_member', 'int');
                
-               // Validate id_guru foreign key reference
-               if (!empty($idGuru)) {
-                  $guruModel = new GuruModel();
-                  $guru = $guruModel->find($idGuru);
-                  if ($guru === null) {
-                     return null; // Guru does not exist
+               // Validate id_member foreign key reference
+               if (!empty($idmember)) {
+                  $memberModel = new memberModel();
+                  $member = $memberModel->find($idmember);
+                  if ($member === null) {
+                     return null; // member does not exist
                   }
-                  $data['id_guru'] = $idGuru;
+                  $data['id_member'] = $idmember;
                } else {
-                  $data['id_guru'] = null;
+                  $data['id_member'] = null;
                }
 
                $data['active'] = 1;

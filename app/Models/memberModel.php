@@ -4,58 +4,97 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class GuruModel extends Model
+class memberModel extends Model
 {
    protected $allowedFields = [
-      'nuptk',
-      'nama_guru',
-      'jenis_kelamin',
-      'alamat',
-      'no_hp',
-      'unique_code',
-      'rfid_code'
-   ];
+   'nama_member',
+   'jenis_kelamin',
+   'alamat',
+   'no_hp',
+   'paket',
+   'tanggal_daftar',
+   'tanggal_expired',
+   'status',
+   'qr_code',
+   'unique_code',
+   'rfid_code'
+];
 
-   protected $table = 'tb_guru';
+   protected $table = 'tb_member';
 
-   protected $primaryKey = 'id_guru';
+   protected $primaryKey = 'id_member';
 
-   public function cekGuru(string $unique_code)
+   public function cekmember(string $unique_code)
    {
       return $this->where(['unique_code' => $unique_code])
          ->orWhere(['rfid_code' => $unique_code])
          ->first();
    }
 
-   public function getAllGuru()
+   public function getAllmember()
    {
-      return $this->orderBy('nama_guru')->findAll();
+      return $this->orderBy('nama_member')->findAll();
    }
 
-   public function getGuruById($id)
+   public function getmemberById($id)
    {
       return $this->where([$this->primaryKey => $id])->first();
    }
 
-   public function createGuru($nuptk, $nama, $jenisKelamin, $alamat, $noHp, $rfid = null)
-   {
-      return $this->save([
-         'nuptk' => $nuptk,
-         'nama_guru' => $nama,
-         'jenis_kelamin' => $jenisKelamin,
-         'alamat' => $alamat,
-         'no_hp' => $noHp,
-         'unique_code' => sha1($nama . md5($nuptk . $nama . $noHp)) . substr(sha1($nuptk . rand(0, 100)), 0, 24),
-         'rfid_code' => $rfid
-      ]);
-   }
+   public function createmember(
+    $nama,
+    $jenisKelamin,
+    $alamat,
+    $noHp,
+    $paket,
+    $rfid = null
+)
+{
+    $tanggalDaftar = date('Y-m-d');
 
-   public function updateGuru($id, $nuptk, $nama, $jenisKelamin, $alamat, $noHp, $rfid = null)
+    switch ($paket) {
+        case '1 Bulan':
+            $expired = date('Y-m-d', strtotime('+1 month'));
+            break;
+
+        case '3 Bulan':
+            $expired = date('Y-m-d', strtotime('+3 month'));
+            break;
+
+        case '6 Bulan':
+            $expired = date('Y-m-d', strtotime('+6 month'));
+            break;
+
+        case '1 Tahun':
+            $expired = date('Y-m-d', strtotime('+1 year'));
+            break;
+
+        default:
+            $expired = date('Y-m-d', strtotime('+1 month'));
+    }
+
+    $uniqueCode = uniqid('MBR');
+
+    return $this->save([
+        'nama_member' => $nama,
+        'jenis_kelamin' => $jenisKelamin,
+        'alamat' => $alamat,
+        'no_hp' => $noHp,
+        'paket' => $paket,
+        'tanggal_daftar' => $tanggalDaftar,
+        'tanggal_expired' => $expired,
+        'status' => 'Aktif',
+        'unique_code' => $uniqueCode,
+        'qr_code' => $uniqueCode,
+        'rfid_code' => $rfid
+    ]);
+}
+
+   public function updatemember($id, $nama, $jenisKelamin, $alamat, $noHp, $rfid = null)
    {
       return $this->save([
          $this->primaryKey => $id,
-         'nuptk' => $nuptk,
-         'nama_guru' => $nama,
+         'nama_member' => $nama,
          'jenis_kelamin' => $jenisKelamin,
          'alamat' => $alamat,
          'no_hp' => $noHp,
@@ -119,18 +158,16 @@ class GuruModel extends Model
          $i = 1;
          foreach ($array as $item) {
             if ($i == $index) {
-               $nuptk = getCSVInputValue($item, 'nuptk');
-               $nama = getCSVInputValue($item, 'nama_guru');
+               $nama = getCSVInputValue($item, 'nama_member');
                $noHp = getCSVInputValue($item, 'no_hp');
 
                $data = array();
-               $data['nuptk'] = $nuptk;
-               $data['nama_guru'] = $nama;
+               $data['nama_member'] = $nama;
                $data['jenis_kelamin'] = getCSVInputValue($item, 'jenis_kelamin');
                $data['alamat'] = getCSVInputValue($item, 'alamat');
                $data['no_hp'] = $noHp;
-               // Logic from createGuru
-               $data['unique_code'] = sha1($nama . md5($nuptk . $nama . $noHp)) . substr(sha1($nuptk . rand(0, 100)), 0, 24);
+               // Logic from createmember
+               $data['unique_code'] = sha1($nama . md5($nama . $noHp)) . substr(sha1(rand(0, 100)), 0, 24);
 
                $this->insert($data);
                return $data;

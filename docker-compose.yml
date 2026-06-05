@@ -3,7 +3,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        image: absensi-sekolah-qr-code
+        image: absensi-perusahaan-qr-code
         container_name: absensi-app
         restart: unless-stopped
         tty: true

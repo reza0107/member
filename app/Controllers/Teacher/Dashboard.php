@@ -33,7 +33,7 @@ class Dashboard extends BaseController
         }
 
         // Get class where the teacher is Wali Kelas
-        $kelas = $this->kelasModel->getKelasByWali($user->id_guru);
+        $kelas = $this->kelasModel->getKelasByWali($user->id_member);
 
         if (empty($kelas)) {
             $data = [
@@ -91,7 +91,7 @@ class Dashboard extends BaseController
             return redirect()->to('teacher/dashboard')->with('error', 'Anda bukan Wali Kelas.');
         }
 
-        $kelas = $this->kelasModel->getKelasByWali($user->id_guru);
+        $kelas = $this->kelasModel->getKelasByWali($user->id_member);
         if (empty($kelas)) {
             return redirect()->to('teacher/dashboard')->with('error', 'Anda belum ditugaskan sebagai Wali Kelas.');
         }

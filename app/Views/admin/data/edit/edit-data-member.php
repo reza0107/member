@@ -6,7 +6,7 @@
          <div class="col-lg-12 col-md-12">
             <div class="card">
                <div class="card-header card-header-success">
-                  <h4 class="card-title"><b>Form Edit Guru</b></h4>
+                  <h4 class="card-title"><b>Form Edit member</b></h4>
 
                </div>
                <div class="card-body mx-5 my-3">
@@ -22,27 +22,18 @@
                      </div>
                   <?php endif; ?>
 
-                  <form action="<?= base_url('admin/guru/edit'); ?>" method="post">
+                  <form action="<?= base_url('admin/member/edit'); ?>" method="post">
                      <?= csrf_field() ?>
                      <?php $validation = \Config\Services::validation(); ?>
 
-                     <input type="hidden" name="id" value="<?= $data['id_guru'] ?>">
+                     <input type="hidden" name="id" value="<?= $data['id_member'] ?>">
 
-                     <div class="form-group mt-4">
-                        <label for="nuptk">NUPTK</label>
-                        <input type="text" id="nuptk"
-                           class="form-control <?= $validation->getError('nuptk') ? 'is-invalid' : ''; ?>" name="nuptk"
-                           placeholder="1234" value="<?= old('nuptk') ?? $oldInput['nuptk'] ?? $data['nuptk'] ?>">
-                        <div class="invalid-feedback">
-                           <?= $validation->getError('nuptk'); ?>
-                        </div>
-                     </div>
 
                      <div class="form-group mt-4">
                         <label for="nama">Nama Lengkap</label>
                         <input type="text" id="nama"
                            class="form-control <?= $validation->getError('nama') ? 'is-invalid' : ''; ?>" name="nama"
-                           placeholder="Your Name" value="<?= old('nama') ?? $oldInput['nama'] ?? $data['nama_guru'] ?>"
+                           placeholder="Your Name" value="<?= old('nama') ?? $oldInput['nama'] ?? $data['nama_member'] ?>"
                            required>
                         <div class="invalid-feedback">
                            <?= $validation->getError('nama'); ?>
@@ -62,7 +53,7 @@
                               <div class="col-auto">
                                  <div class="row">
                                     <div class="col-auto pr-1">
-                                       <input class="form-check" type="radio" name="jk" id="laki" value="1" <?= $l; ?>>
+                                       <input class="form-check" type="radio" name="jk" value="Laki-laki" <?= $l; ?>>
                                     </div>
                                     <div class="col">
                                        <label class="form-check-label pl-0 pt-1" for="laki">
@@ -74,7 +65,7 @@
                               <div class="col">
                                  <div class="row">
                                     <div class="col-auto pr-1">
-                                       <input class="form-check" type="radio" name="jk" id="perempuan" value="2" <?= $p; ?>>
+                                       <input class="form-check" type="radio" name="jk" value="Perempuan" <?= $p; ?>>
                                     </div>
                                     <div class="col">
                                        <label class="form-check-label pl-0 pt-1" for="perempuan">
@@ -106,6 +97,34 @@
                            <?= $validation->getError('no_hp'); ?>
                         </div>
                      </div>
+
+                     <div class="form-group mt-4">
+   <label>Paket Membership</label>
+
+   <select name="paket" class="form-control" required>
+
+      <option value="1 Bulan"
+         <?= ($data['paket'] == '1 Bulan') ? 'selected' : '' ?>>
+         1 Bulan
+      </option>
+
+      <option value="3 Bulan"
+         <?= ($data['paket'] == '3 Bulan') ? 'selected' : '' ?>>
+         3 Bulan
+      </option>
+
+      <option value="6 Bulan"
+         <?= ($data['paket'] == '6 Bulan') ? 'selected' : '' ?>>
+         6 Bulan
+      </option>
+
+      <option value="1 Tahun"
+         <?= ($data['paket'] == '1 Tahun') ? 'selected' : '' ?>>
+         1 Tahun
+      </option>
+
+   </select>
+</div>
 
                      <div class="form-group mt-4">
                         <label for="rfid">RFID Code</label>

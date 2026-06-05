@@ -4,7 +4,7 @@ Terima kasih atas minat Anda untuk berkontribusi pada proyek ini! Kami sangat me
 
 ## Cara Berkontribusi
 
-1. Periksa [Issues](https://github.com/ikhsan3adi/absensi-sekolah-qr-code/issues) proyek untuk melihat tugas-tugas yang tersedia.
+1. Periksa [Issues](https://github.com/ikhsan3adi/absensi-perusahaan-qr-code/issues) proyek untuk melihat tugas-tugas yang tersedia.
 2. Pilih tugas yang ingin Anda kerjakan, atau ajukan ide baru jika tidak ada yang sesuai.
 3. Fork repositori ini dan buat cabang (branch) untuk pengembangan Anda.
 4. Lakukan perubahan yang diperlukan.
@@ -18,7 +18,7 @@ Terima kasih atas minat Anda untuk berkontribusi pada proyek ini! Kami sangat me
 
 ## Laporan Masalah
 
-Jika Anda menemui masalah atau memiliki saran, silakan buka isu baru di [Issues](https://github.com/ikhsan3adi/absensi-sekolah-qr-code/issues) proyek ini.
+Jika Anda menemui masalah atau memiliki saran, silakan buka isu baru di [Issues](https://github.com/ikhsan3adi/absensi-perusahaan-qr-code/issues) proyek ini.
 
 Terima kasih atas kontribusi Anda!
 
@@ -30,7 +30,7 @@ Thank you for your interest in contributing to this project! We highly appreciat
 
 ## How to Contribute
 
-1. Check the [Issues](https://github.com/ikhsan3adi/absensi-sekolah-qr-code/issues) section of the project to see available tasks.
+1. Check the [Issues](https://github.com/ikhsan3adi/absensi-perusahaan-qr-code/issues) section of the project to see available tasks.
 2. Choose a task you'd like to work on, or propose a new idea if none fits.
 3. Fork this repository and create a branch for your development.
 4. Make the necessary changes.
@@ -44,6 +44,6 @@ Thank you for your interest in contributing to this project! We highly appreciat
 
 ## Reporting Issues
 
-If you encounter any issues or have suggestions, please open a new issue in the [Issues](https://github.com/ikhsan3adi/absensi-sekolah-qr-code/issues) section of this project.
+If you encounter any issues or have suggestions, please open a new issue in the [Issues](https://github.com/ikhsan3adi/absensi-perusahaan-qr-code/issues) section of this project.
 
 Thank you for your contribution!

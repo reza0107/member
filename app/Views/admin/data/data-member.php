@@ -21,13 +21,13 @@
                         <div class="nav-tabs-navigation">
                            <div class="row">
                               <div class="col-md-4 col-lg-5">
-                                 <h4 class="card-title"><b>Daftar Guru</b></h4>
+                                 <h4 class="card-title"><b>Daftar member</b></h4>
                                  <p class="card-category">Angkatan <?= $generalSettings->school_year; ?></p>
                               </div>
                               <div class="ml-md-auto col-auto row">
                                  <div class="col-12 col-sm-auto nav nav-tabs">
                                     <div class="nav-item">
-                                       <a class="nav-link" href="<?= base_url('admin/guru/bulk'); ?>">
+                                       <a class="nav-link" href="<?= base_url('admin/member/bulk'); ?>">
                                           <i class="material-icons">cloud_upload</i> Import CSV
                                           <div class="ripple-container"></div>
                                        </a>
@@ -36,15 +36,15 @@
                                  <div class="col-12 col-sm-auto nav nav-tabs">
                                     <div class="nav-item">
                                        <a class="nav-link" id="tabBtn" onclick="removeHover()"
-                                          href="<?= base_url('admin/guru/create'); ?>">
-                                          <i class="material-icons">add</i> Tambah data guru
+                                          href="<?= base_url('admin/member/create'); ?>">
+                                          <i class="material-icons">add</i> Tambah data member
                                           <div class="ripple-container"></div>
                                        </a>
                                     </div>
                                  </div>
                                  <div class="col-12 col-sm-auto nav nav-tabs">
                                     <div class="nav-item">
-                                       <a class="nav-link" id="refreshBtn" onclick="getDataGuru()" href="#"
+                                       <a class="nav-link" id="refreshBtn" onclick="getDatamember()" href="#"
                                           data-toggle="tab">
                                           <i class="material-icons">refresh</i> Refresh
                                           <div class="ripple-container"></div>
@@ -55,8 +55,8 @@
                            </div>
                         </div>
                      </div>
-                     <div id="dataGuru">
-                        <p class="text-center mt-3">Daftar guru muncul disini</p>
+                     <div id="datamember">
+                        <p class="text-center mt-3">Daftar member muncul disini</p>
                      </div>
                   </div>
                </div>
@@ -70,25 +70,25 @@
 
 <?= $this->section('scripts') ?>
 <script>
-   getDataGuru();
+   getDatamember();
 
-   function getDataGuru() {
+   function getDatamember() {
       jQuery.ajax({
-         url: "<?= base_url('/admin/guru'); ?>",
+         url: "<?= base_url('/admin/member'); ?>",
          type: 'post',
          data: {},
          success: function (response, status, xhr) {
             // console.log(status);
-            $('#dataGuru').html(response);
+            $('#datamember').html(response);
 
             $('html, body').animate({
-               scrollTop: $("#dataGuru").offset().top
+               scrollTop: $("#datamember").offset().top
             }, 500);
             $('#refreshBtn').removeClass('active show');
          },
          error: function (xhr, status, thrown) {
             console.log(thrown);
-            $('#dataGuru').html(thrown);
+            $('#datamember').html(thrown);
             $('#refreshBtn').removeClass('active show');
          }
       });

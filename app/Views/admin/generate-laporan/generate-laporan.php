@@ -99,16 +99,16 @@
                      </div>
                      <div class="col-md-6">
                         <div class="card h-100">
-                           <form action="<?= base_url('admin/laporan/guru'); ?>" method="post"
+                           <form action="<?= base_url('admin/laporan/member'); ?>" method="post"
                               class="card-body d-flex flex-column">
-                              <h4 class="text-success"><b>Laporan Absen Guru</b></h4>
-                              <p>Total jumlah guru : <b><?= count($guru); ?></b></p>
+                              <h4 class="text-success"><b>Laporan Absen member</b></h4>
+                              <p>Total jumlah member : <b><?= count($member); ?></b></p>
                               <div class="row align-items-center">
                                  <div class="col-auto">
                                     <p class="d-inline"><b>Bulan :</b></p>
                                  </div>
                                  <div class="col-5">
-                                    <input type="month" name="tanggalGuru" id="tanggalGuru" class="form-control"
+                                    <input type="month" name="tanggalmember" id="tanggalmember" class="form-control"
                                        value="<?= date('Y-m'); ?>">
                                  </div>
                               </div>

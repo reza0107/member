@@ -22,7 +22,7 @@ Mengisi data master status kehadiran.
 - Tanpa keterangan
 
 ### 3. JurusanSeeder.php
-Mengisi data jurusan sekolah.
+Mengisi data jurusan perusahaan.
 
 **Data yang di-seed:**
 - OTKP (Otomatisasi dan Tata Kelola Perkantoran)
@@ -30,7 +30,7 @@ Mengisi data jurusan sekolah.
 - AKL (Akuntansi dan Keuangan Lembaga)
 - RPL (Rekayasa Perangkat Lunak)
 
-**Catatan:** Sesuaikan dengan jurusan di sekolah Anda.
+**Catatan:** Sesuaikan dengan jurusan di perusahaan Anda.
 
 ### 4. KelasSeeder.php
 Mengisi data kelas awal untuk semua tingkat dan jurusan.
@@ -61,7 +61,7 @@ Edit file `SuperadminSeeder.php` sebelum menjalankan seed.
 Mengisi pengaturan umum aplikasi.
 
 **Data default:**
-- School Name: SMK 1 Indonesia
+- School Name: Raja Gym
 - School Year: 2024/2025
 - Copyright: © 2025 All rights reserved.
 - Logo: null (akan diisi lewat aplikasi)
@@ -69,12 +69,12 @@ Mengisi pengaturan umum aplikasi.
 **Customize Settings:**
 Edit file `GeneralSettingsSeeder.php` sebelum menjalankan seed.
 
-### 7. GuruSeeder.php (Optional)
-Contoh seeder untuk data guru. Gunakan untuk development/testing.
+### 7. memberSeeder.php (Optional)
+Contoh seeder untuk data member. Gunakan untuk development/testing.
 
 **Cara menjalankan:**
 ```bash
-php spark db:seed GuruSeeder
+php spark db:seed memberSeeder
 ```
 
 ### 8. SiswaSeeder.php (Optional)
@@ -197,7 +197,7 @@ Pastikan seed dalam urutan yang benar:
 # Seed dengan sample data lengkap
 php spark db:seed DatabaseSeeder
 
-# Uncomment GuruSeeder dan SiswaSeeder di DatabaseSeeder
+# Uncomment memberSeeder dan SiswaSeeder di DatabaseSeeder
 php spark db:seed DatabaseSeeder
 ```
 

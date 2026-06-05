@@ -6,7 +6,7 @@
          <div class="card-body">
             <div class="pt-3 pl-3 pb-2">
                <h4><b>Tanggal</b></h4>
-               <input class="form-control" type="date" name="tangal" id="tanggal" value="<?= date('Y-m-d'); ?>" onchange="getGuru()" style="max-width: 200px;">
+               <input class="form-control" type="date" name="tangal" id="tanggal" value="<?= date('Y-m-d'); ?>" onchange="getmember()" style="max-width: 200px;">
             </div>
          </div>
       </div>
@@ -15,18 +15,18 @@
             <div class="row justify-content-between">
                <div class="col">
                   <div class="pt-3 pl-3">
-                     <h4><b>Absen Guru</b></h4>
-                     <p>Daftar guru muncul disini</p>
+                     <h4><b>Absen member</b></h4>
+                     <p>Daftar member muncul disini</p>
                   </div>
                </div>
                <div class="col-sm-auto">
-                  <a href="#" class="btn btn-success pl-3 mr-3 mt-3" onclick="kelas = getGuru()" data-toggle="tab">
+                  <a href="#" class="btn btn-success pl-3 mr-3 mt-3" onclick="kelas = getmember()" data-toggle="tab">
                      <i class="material-icons mr-2">refresh</i> Refresh
                   </a>
                </div>
             </div>
 
-            <div id="dataGuru">
+            <div id="datamember">
 
             </div>
          </div>
@@ -43,7 +43,7 @@
                   <span aria-hidden="true">&times;</span>
                </button>
             </div>
-            <div id="modalFormUbahGuru"></div>
+            <div id="modalFormUbahmember"></div>
          </div>
       </div>
    </div>
@@ -52,28 +52,28 @@
 
 <?= $this->section('scripts') ?>
 <script>
-   getGuru();
+   getmember();
 
-   function getGuru() {
+   function getmember() {
       var tanggal = $('#tanggal').val();
 
       jQuery.ajax({
-         url: "<?= base_url('/admin/absen-guru'); ?>",
+         url: "<?= base_url('/admin/absen-member'); ?>",
          type: 'post',
          data: {
             'tanggal': tanggal
          },
          success: function(response, status, xhr) {
             // console.log(status);
-            $('#dataGuru').html(response);
+            $('#datamember').html(response);
 
             $('html, body').animate({
-               scrollTop: $("#dataGuru").offset().top
+               scrollTop: $("#datamember").offset().top
             }, 500);
          },
          error: function(xhr, status, thrown) {
             console.log(thrown);
-            $('#dataGuru').html(thrown);
+            $('#datamember').html(thrown);
          }
       });
    }
@@ -89,19 +89,19 @@
       });
 
       jQuery.ajax({
-         url: "<?= base_url('/admin/absen-guru/edit'); ?>",
+         url: "<?= base_url('/admin/absen-member/edit'); ?>",
          type: 'post',
          data: form,
          success: function(response, status, xhr) {
             // console.log(status);
 
             if (response['status']) {
-               alert('Berhasil ubah kehadiran : ' + response['nama_guru']);
+               alert('Berhasil ubah kehadiran : ' + response['nama_member']);
             } else {
-               alert('Gagal ubah kehadiran : ' + response['nama_guru']);
+               alert('Gagal ubah kehadiran : ' + response['nama_member']);
             }
 
-            getGuru();
+            getmember();
          },
          error: function(xhr, status, thrown) {
             console.log(thrown);
@@ -110,21 +110,21 @@
       });
    }
 
-   function getDataKehadiran(idPresensi, idGuru) {
+   function getDataKehadiran(idPresensi, idmember) {
       jQuery.ajax({
-         url: "<?= base_url('/admin/absen-guru/kehadiran'); ?>",
+         url: "<?= base_url('/admin/absen-member/kehadiran'); ?>",
          type: 'post',
          data: {
             'id_presensi': idPresensi,
-            'id_guru': idGuru
+            'id_member': idmember
          },
          success: function(response, status, xhr) {
             // console.log(status);
-            $('#modalFormUbahGuru').html(response);
+            $('#modalFormUbahmember').html(response);
          },
          error: function(xhr, status, thrown) {
             console.log(thrown);
-            $('#modalFormUbahGuru').html(thrown);
+            $('#modalFormUbahmember').html(thrown);
          }
       });
    }

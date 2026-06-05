@@ -13,11 +13,14 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('content'); ?>
-<?php
-$oppBtn = '';
 
+<?php
+$waktu = $waktu ?? 'Masuk';
+
+$oppBtn = ($waktu == 'masuk') ? 'pulang' : 'masuk';
 $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
 ?>
+
 <div class="main-panel">
    <div class="content pt-2 px-0 px-sm-1 px-md-2">
       <div class="container-fluid px-0 px-md-2">
@@ -108,7 +111,7 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
                   <div class="card-body">
                      <h3 class="mt-2"><b>Penggunaan</b></h3>
                      <ul class="pl-3">
-                        <li>Jika berhasil scan maka akan muncul data siswa/guru dibawah preview kamera</li>
+                        <li>Jika berhasil scan maka akan muncul data member dibawah preview kamera</li>
                         <li>Klik tombol <b><span class="text-success">Absen masuk</span> / <span class="text-warning">Absen
                                  pulang</span></b> untuk mengubah waktu absensi</li>
                         <li>Untuk melihat data absensi, klik tombol <span class="text-primary"><i class="material-icons" style="font-size: 16px;">dashboard</i> Dashboard</span></li>
@@ -130,7 +133,7 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
    const codeReader = new ZXing.BrowserMultiFormatReader();
    const sourceSelect = $('#pilihKamera');
 
-   $(document).on('change', '#pilihKamera', function () {
+   $(document).on('change', '#pilihKamera', function() {
       selectedDeviceId = $(this).val();
       if (codeReader && $('#toggleKamera').is(':checked')) {
          codeReader.reset();
@@ -138,7 +141,7 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
       }
    })
 
-   $(document).on('change', '#toggleKamera', function () {
+   $(document).on('change', '#toggleKamera', function() {
       if (this.checked) {
          $('#cameraSection').slideDown();
          initScanner();
@@ -148,7 +151,7 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
       }
    });
 
-   $(document).on('change', '#toggleRFID', function () {
+   $(document).on('change', '#toggleRFID', function() {
       if (this.checked) {
          $('#rfidSection').slideDown();
          $('#rfidInput').focus();
@@ -239,7 +242,7 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
             'unique_code': code,
             'waktu': '<?= strtolower($waktu); ?>'
          },
-         success: function (response, status, xhr) {
+         success: function(response, status, xhr) {
             audio.play();
             console.log(response);
             $('#hasilScan').html(response);
@@ -248,7 +251,7 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
                scrollTop: $("#hasilScan").offset().top
             }, 500);
          },
-         error: function (xhr, status, thrown) {
+         error: function(xhr, status, thrown) {
             console.log(thrown);
             $('#hasilScan').html(thrown);
          }
@@ -260,7 +263,7 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
    }
 
    // RFID Listener
-   $('#rfidInput').on('keypress', function (e) {
+   $('#rfidInput').on('keypress', function(e) {
       if (e.which == 13) {
          let code = $(this).val().trim();
          if (code.length > 0) {
@@ -271,7 +274,7 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
       }
    });
 
-   $(document).ready(function () {
+   $(document).ready(function() {
       const rfidInput = $('#rfidInput');
       const statusBadge = $('#statusBadge');
       const statusText = $('#statusText');
@@ -295,11 +298,11 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
          updateStatus(false);
       }
 
-      rfidInput.on('focus', function () {
+      rfidInput.on('focus', function() {
          updateStatus(true);
       });
 
-      rfidInput.on('blur', function () {
+      rfidInput.on('blur', function() {
          updateStatus(false);
          // Auto refocus after a short delay if not focusing on other inputs
          setTimeout(() => {
@@ -310,7 +313,7 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
       });
 
       // Ensure focus remains on rfidInput if clicked elsewhere (except camera select)
-      $(document).on('click', function (e) {
+      $(document).on('click', function(e) {
          if ($('#toggleRFID').is(':checked') && !$(e.target).closest('#pilihKamera, #toggleKamera, #toggleRFID').length) {
             rfidInput.focus();
          }

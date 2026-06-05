@@ -14,8 +14,8 @@
                         <form action="<?= base_url('admin/general-settings/update'); ?>" method="post" enctype="multipart/form-data">
                             <?= csrf_field() ?>
                             <div class="form-group mt-4">
-                                <label for="school_name">Nama Sekolah</label>
-                                <input type="text" id="school_name" class="form-control <?= invalidFeedback('school_name') ? 'is-invalid' : ''; ?>" name="school_name" placeholder="SMK 1 Indonesia"
+                                <label for="school_name">Nama perusahaan</label>
+                                <input type="text" id="school_name" class="form-control <?= invalidFeedback('school_name') ? 'is-invalid' : ''; ?>" name="school_name" placeholder="Raja Gym"
                                     value="<?= $generalSettings->school_name; ?>" required>
                                 <div class="invalid-feedback">
                                     <?= invalidFeedback('school_name'); ?>

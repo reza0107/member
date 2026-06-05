@@ -72,11 +72,11 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mt-4">
-                                        <label for="id_guru">Hubungkan ke Guru (Opsional)</label>
-                                        <select class="custom-select" id="id_guru" name="id_guru">
-                                            <option value="">--Pilih Guru--</option>
-                                            <?php foreach ($guru as $g): ?>
-                                                <option value="<?= $g['id_guru']; ?>" <?= old('id_guru') == $g['id_guru'] ? 'selected' : ''; ?>><?= $g['nama_guru']; ?></option>
+                                        <label for="id_member">Hubungkan ke member (Opsional)</label>
+                                        <select class="custom-select" id="id_member" name="id_member">
+                                            <option value="">--Pilih member--</option>
+                                            <?php foreach ($member as $g): ?>
+                                                <option value="<?= $g['id_member']; ?>" <?= old('id_member') == $g['id_member'] ? 'selected' : ''; ?>><?= $g['nama_member']; ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>

@@ -122,24 +122,24 @@ $routes->group('admin', function (RouteCollection $routes) {
    });
 
 
-   // admin lihat data guru
-   $routes->get('guru', 'Admin\DataGuru::index');
-   $routes->post('guru', 'Admin\DataGuru::ambilDataGuru');
-   // admin tambah data guru
-   $routes->get('guru/create', 'Admin\DataGuru::formTambahGuru');
-   $routes->post('guru/create', 'Admin\DataGuru::saveGuru');
-   // admin edit data guru
-   $routes->get('guru/edit/(:any)', 'Admin\DataGuru::formEditGuru/$1');
-   $routes->post('guru/edit', 'Admin\DataGuru::updateGuru');
-   // admin hapus data guru
-   $routes->delete('guru/delete/(:any)', 'Admin\DataGuru::delete/$1');
-   $routes->get('guru/bulk', 'Admin\DataGuru::bulkPost');
+   // admin lihat data member
+   $routes->get('member', 'Admin\Datamember::index');
+   $routes->post('member', 'Admin\Datamember::ambilDatamember');
+   // admin tambah data member
+   $routes->get('member/create', 'Admin\Datamember::formTambahmember');
+   $routes->post('member/create', 'Admin\Datamember::savemember');
+   // admin edit data member
+   $routes->get('member/edit/(:any)', 'Admin\Datamember::formEditmember/$1');
+   $routes->post('member/edit', 'Admin\Datamember::updatemember');
+   // admin hapus data member
+   $routes->delete('member/delete/(:any)', 'Admin\Datamember::delete/$1');
+   $routes->get('member/bulk', 'Admin\Datamember::bulkPost');
 
-   // POST Data Guru
-   $routes->group('guru', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
-      $routes->post('downloadCSVFilePost', 'DataGuru::downloadCSVFilePost');
-      $routes->post('generateCSVObjectPost', 'DataGuru::generateCSVObjectPost');
-      $routes->post('importCSVItemPost', 'DataGuru::importCSVItemPost');
+   // POST Data member
+   $routes->group('member', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
+      $routes->post('downloadCSVFilePost', 'Datamember::downloadCSVFilePost');
+      $routes->post('generateCSVObjectPost', 'Datamember::generateCSVObjectPost');
+      $routes->post('importCSVItemPost', 'Datamember::importCSVItemPost');
    });
 
 
@@ -149,11 +149,11 @@ $routes->group('admin', function (RouteCollection $routes) {
    $routes->post('absen-siswa/kehadiran', 'Admin\DataAbsenSiswa::ambilKehadiran'); // ambil kehadiran siswa
    $routes->post('absen-siswa/edit', 'Admin\DataAbsenSiswa::ubahKehadiran'); // ubah kehadiran siswa
 
-   // admin lihat data absen guru
-   $routes->get('absen-guru', 'Admin\DataAbsenGuru::index');
-   $routes->post('absen-guru', 'Admin\DataAbsenGuru::ambilDataGuru'); // ambil guru berdasarkan tanggal
-   $routes->post('absen-guru/kehadiran', 'Admin\DataAbsenGuru::ambilKehadiran'); // ambil kehadiran guru
-   $routes->post('absen-guru/edit', 'Admin\DataAbsenGuru::ubahKehadiran'); // ubah kehadiran guru
+   // admin lihat data absen member
+   $routes->get('absen-member', 'Admin\DataAbsenmember::index');
+   $routes->post('absen-member', 'Admin\DataAbsenmember::ambilDatamember'); // ambil member berdasarkan tanggal
+   $routes->post('absen-member/kehadiran', 'Admin\DataAbsenmember::ambilKehadiran'); // ambil kehadiran member
+   $routes->post('absen-member/edit', 'Admin\DataAbsenmember::ubahKehadiran'); // ubah kehadiran member
 
    // admin generate QR
    $routes->get('generate', 'Admin\GenerateQR::index');
@@ -161,18 +161,18 @@ $routes->group('admin', function (RouteCollection $routes) {
 
    // Generate QR
    $routes->post('generate/siswa', 'Admin\QRGenerator::generateQrSiswa');
-   $routes->post('generate/guru', 'Admin\QRGenerator::generateQrGuru');
+   $routes->post('generate/member', 'Admin\QRGenerator::generateQrmember');
 
    // Download QR
    $routes->get('qr/siswa/download', 'Admin\QRGenerator::downloadAllQrSiswa');
    $routes->get('qr/siswa/(:any)/download', 'Admin\QRGenerator::downloadQrSiswa/$1');
-   $routes->get('qr/guru/download', 'Admin\QRGenerator::downloadAllQrGuru');
-   $routes->get('qr/guru/(:any)/download', 'Admin\QRGenerator::downloadQrGuru/$1');
+   $routes->get('qr/member/download', 'Admin\QRGenerator::downloadAllQrmember');
+   $routes->get('qr/member/(:any)/download', 'Admin\QRGenerator::downloadQrmember/$1');
 
    // admin buat laporan
    $routes->get('laporan', 'Admin\GenerateLaporan::index');
    $routes->post('laporan/siswa', 'Admin\GenerateLaporan::generateLaporanSiswa');
-   $routes->post('laporan/guru', 'Admin\GenerateLaporan::generateLaporanGuru');
+   $routes->post('laporan/member', 'Admin\GenerateLaporan::generateLaporanmember');
 
    // superadmin data petugas
    $routes->group('petugas', ['namespace' => 'App\Controllers\Admin'], function ($routes) {

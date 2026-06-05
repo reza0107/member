@@ -16,7 +16,7 @@ function getUserRole(int|string $role): string
 
 function is_wali_kelas(): bool
 {
-    return !empty(user()->id_guru);
+    return !empty(user()->id_member);
 }
 
 function is_superadmin(): bool

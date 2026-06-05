@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call('GeneralSettingsSeeder');
         
         // Optional: Uncomment if you want to seed sample data
-        // $this->call('GuruSeeder');
+        // $this->call('memberSeeder');
         // $this->call('SiswaSeeder');
     }
 }

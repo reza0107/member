@@ -32,7 +32,7 @@ class Reports extends BaseController
             return redirect()->to('admin')->with('error', 'Anda bukan Wali Kelas.');
         }
 
-        $kelas = $this->kelasModel->getKelasByWali($user->id_guru);
+        $kelas = $this->kelasModel->getKelasByWali($user->id_member);
 
         if (empty($kelas)) {
             return redirect()->to('teacher/dashboard')->with('error', 'Kelas belum ditugaskan.');
@@ -50,7 +50,7 @@ class Reports extends BaseController
     public function generate()
     {
         $user = user();
-        $kelas = $this->kelasModel->getKelasByWali($user->id_guru);
+        $kelas = $this->kelasModel->getKelasByWali($user->id_member);
 
         if (empty($kelas)) {
             return redirect()->to('teacher/dashboard');

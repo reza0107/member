@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\PresensiGuruModel;
-use App\Models\GuruModel;
+use App\Models\PresensimemberModel;
+use App\Models\memberModel;
 use App\Libraries\enums\Kehadiran;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
@@ -12,7 +12,7 @@ use CodeIgniter\I18n\Time;
 /**
  * @internal
  */
-final class PresensiGuruModelTest extends CIUnitTestCase
+final class PresensimemberModelTest extends CIUnitTestCase
 {
     use DatabaseTestTrait;
 
@@ -23,32 +23,32 @@ final class PresensiGuruModelTest extends CIUnitTestCase
     protected $seed        = ['\App\Database\Seeds\KehadiranSeeder'];
     protected $seedOnce    = true;
 
-    protected PresensiGuruModel $model;
-    protected $testGuruId;
+    protected PresensimemberModel $model;
+    protected $testmemberId;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->model = new PresensiGuruModel();
+        $this->model = new PresensimemberModel();
         
         // Setup test data
-        $this->db->table('tb_guru')->insert([
-            'nuptk' => '1234567890123456',
-            'nama_guru' => 'Test Guru',
+        $this->db->table('tb_member')->insert([
+            '' => '1234567890123456',
+            'nama_member' => 'Test member',
             'jenis_kelamin' => 'Laki-laki',
             'alamat' => 'Jl. Test',
             'no_hp' => '08123456789',
-            'unique_code' => 'test-guru-code-123',
+            'unique_code' => 'test-member-code-123',
         ]);
         
-        $this->testGuruId = $this->db->insertID();
+        $this->testmemberId = $this->db->insertID();
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
 
-        $this->db->table('tb_guru')->delete(['id_guru' => $this->testGuruId]);        
+        $this->db->table('tb_member')->delete(['id_member' => $this->testmemberId]);        
     }
 
     // =====================================================
@@ -58,7 +58,7 @@ final class PresensiGuruModelTest extends CIUnitTestCase
     public function testCekAbsenReturnsFalseWhenNoAttendance(): void
     {
         $date = Time::today()->toDateString();
-        $result = $this->model->cekAbsen($this->testGuruId, $date);
+        $result = $this->model->cekAbsen($this->testmemberId, $date);
         
         $this->assertFalse($result);
     }
@@ -69,9 +69,9 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         $time = Time::now()->toTimeString();
         
         // Create attendance
-        $this->model->absenMasuk($this->testGuruId, $date, $time);
+        $this->model->absenMasuk($this->testmemberId, $date, $time);
         
-        $result = $this->model->cekAbsen($this->testGuruId, $date);
+        $result = $this->model->cekAbsen($this->testmemberId, $date);
         
         $this->assertNotFalse($result);
         $this->assertIsInt(intval($result));
@@ -83,12 +83,12 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         $date = Time::today()->toDateString();
         $time = Time::now()->toTimeString();
         
-        $this->model->absenMasuk($this->testGuruId, $date, $time);
+        $this->model->absenMasuk($this->testmemberId, $date, $time);
         
-        $presensi = $this->model->getPresensiByIdGuruTanggal($this->testGuruId, $date);
+        $presensi = $this->model->getPresensiByIdmemberTanggal($this->testmemberId, $date);
         
         $this->assertNotNull($presensi);
-        $this->assertEquals($this->testGuruId, $presensi['id_guru']);
+        $this->assertEquals($this->testmemberId, $presensi['id_member']);
         $this->assertEquals($date, $presensi['tanggal']);
         $this->assertEquals($time, $presensi['jam_masuk']);
         $this->assertNull($presensi['jam_keluar']);
@@ -103,8 +103,8 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         $timeKeluar = '15:00:00';
         
         // Create entry attendance
-        $this->model->absenMasuk($this->testGuruId, $date, $timeMasuk);
-        $idPresensi = $this->model->cekAbsen($this->testGuruId, $date);
+        $this->model->absenMasuk($this->testmemberId, $date, $timeMasuk);
+        $idPresensi = $this->model->cekAbsen($this->testmemberId, $date);
         
         // Update exit attendance
         $this->model->absenKeluar($idPresensi, $timeKeluar);
@@ -116,18 +116,18 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         $this->assertEquals($timeKeluar, $presensi['jam_keluar']);
     }
 
-    public function testGetPresensiByIdGuruTanggalReturnsCorrectRecord(): void
+    public function testGetPresensiByIdmemberTanggalReturnsCorrectRecord(): void
     {
         $date = Time::today()->toDateString();
         $time = Time::now()->toTimeString();
         
-        $this->model->absenMasuk($this->testGuruId, $date, $time);
+        $this->model->absenMasuk($this->testmemberId, $date, $time);
         
-        $result = $this->model->getPresensiByIdGuruTanggal($this->testGuruId, $date);
+        $result = $this->model->getPresensiByIdmemberTanggal($this->testmemberId, $date);
         
         $this->assertNotNull($result);
         $this->assertIsArray($result);
-        $this->assertEquals($this->testGuruId, $result['id_guru']);
+        $this->assertEquals($this->testmemberId, $result['id_member']);
         $this->assertEquals($date, $result['tanggal']);
     }
 
@@ -136,8 +136,8 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         $date = Time::today()->toDateString();
         $time = Time::now()->toTimeString();
         
-        $this->model->absenMasuk($this->testGuruId, $date, $time);
-        $idPresensi = $this->model->cekAbsen($this->testGuruId, $date);
+        $this->model->absenMasuk($this->testmemberId, $date, $time);
+        $idPresensi = $this->model->cekAbsen($this->testmemberId, $date);
         
         $result = $this->model->getPresensiById($idPresensi);
         
@@ -153,7 +153,7 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         
         $result = $this->model->updatePresensi(
             null,
-            $this->testGuruId,
+            $this->testmemberId,
             $date,
             Kehadiran::Sakit->value,
             $jamMasuk,
@@ -163,7 +163,7 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         
         $this->assertTrue($result);
         
-        $presensi = $this->model->getPresensiByIdGuruTanggal($this->testGuruId, $date);
+        $presensi = $this->model->getPresensiByIdmemberTanggal($this->testmemberId, $date);
         $this->assertNotNull($presensi);
         $this->assertEquals(Kehadiran::Sakit->value, $presensi['id_kehadiran']);
         $this->assertEquals('Sakit demam', $presensi['keterangan']);
@@ -175,13 +175,13 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         $time = Time::now()->toTimeString();
         
         // Create initial attendance
-        $this->model->absenMasuk($this->testGuruId, $date, $time);
-        $idPresensi = $this->model->cekAbsen($this->testGuruId, $date);
+        $this->model->absenMasuk($this->testmemberId, $date, $time);
+        $idPresensi = $this->model->cekAbsen($this->testmemberId, $date);
         
         // Update attendance
         $result = $this->model->updatePresensi(
             $idPresensi,
-            $this->testGuruId,
+            $this->testmemberId,
             $date,
             Kehadiran::Izin->value,
             null,
@@ -201,19 +201,19 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         $date = Time::today()->toDateString();
         
         // Add another teacher
-        $this->db->table('tb_guru')->insert([
-            'nuptk' => '1234567890123457',
-            'nama_guru' => 'Test Guru 2',
+        $this->db->table('tb_member')->insert([
+            '' => '1234567890123457',
+            'nama_member' => 'Test member 2',
             'jenis_kelamin' => 'Perempuan',
             'alamat' => 'Jl. Test 2',
             'no_hp' => '08123456788',
-            'unique_code' => 'test-guru-code-124',
+            'unique_code' => 'test-member-code-124',
         ]);
         
-        $guruId2 = $this->db->insertID();
+        $memberId2 = $this->db->insertID();
         
         // First teacher has attendance
-        $this->model->absenMasuk($this->testGuruId, $date, '07:00:00');
+        $this->model->absenMasuk($this->testmemberId, $date, '07:00:00');
         
         // Second teacher has no attendance
         
@@ -240,19 +240,19 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         $date = Time::today()->toDateString();
         $time = Time::now()->toTimeString();
         
-        $this->model->absenMasuk($this->testGuruId, $date, $time);
+        $this->model->absenMasuk($this->testmemberId, $date, $time);
         
         // Check with different date
         $differentDate = Time::tomorrow()->toDateString();
-        $result = $this->model->cekAbsen($this->testGuruId, $differentDate);
+        $result = $this->model->cekAbsen($this->testmemberId, $differentDate);
         
         $this->assertFalse($result);
     }
 
-    public function testGetPresensiByIdGuruTanggalReturnsNullWhenNoRecord(): void
+    public function testGetPresensiByIdmemberTanggalReturnsNullWhenNoRecord(): void
     {
         $date = Time::today()->toDateString();
-        $result = $this->model->getPresensiByIdGuruTanggal($this->testGuruId, $date);
+        $result = $this->model->getPresensiByIdmemberTanggal($this->testmemberId, $date);
         
         $this->assertNull($result);
     }
@@ -282,7 +282,7 @@ final class PresensiGuruModelTest extends CIUnitTestCase
         // Create initial attendance with keterangan
         $this->model->updatePresensi(
             null,
-            $this->testGuruId,
+            $this->testmemberId,
             $date,
             Kehadiran::Sakit->value,
             '07:00:00',
@@ -290,12 +290,12 @@ final class PresensiGuruModelTest extends CIUnitTestCase
             'Sakit awal'
         );
         
-        $idPresensi = $this->model->cekAbsen($this->testGuruId, $date);
+        $idPresensi = $this->model->cekAbsen($this->testmemberId, $date);
         
         // Update without providing keterangan (null)
         $this->model->updatePresensi(
             $idPresensi,
-            $this->testGuruId,
+            $this->testmemberId,
             $date,
             Kehadiran::Hadir->value,
             null,
@@ -317,12 +317,12 @@ final class PresensiGuruModelTest extends CIUnitTestCase
     {
         $date = Time::today()->toDateString();
         
-        $this->model->absenMasuk($this->testGuruId, $date, '07:00:00');
-        $this->model->absenMasuk($this->testGuruId, $date, '08:00:00');
+        $this->model->absenMasuk($this->testmemberId, $date, '07:00:00');
+        $this->model->absenMasuk($this->testmemberId, $date, '08:00:00');
         
         // Should create 2 records (duplicate entries)
-        $records = $this->db->table('tb_presensi_guru')
-            ->where('id_guru', $this->testGuruId)
+        $records = $this->db->table('tb_presensi_member')
+            ->where('id_member', $this->testmemberId)
             ->where('tanggal', $date)
             ->get()
             ->getResultArray();
@@ -334,7 +334,7 @@ final class PresensiGuruModelTest extends CIUnitTestCase
     public function testCekAbsenWithTimeObject(): void
     {
         $date = Time::today();
-        $result = $this->model->cekAbsen($this->testGuruId, $date);
+        $result = $this->model->cekAbsen($this->testmemberId, $date);
         
         $this->assertFalse($result);
     }
@@ -343,13 +343,13 @@ final class PresensiGuruModelTest extends CIUnitTestCase
     {
         $date = Time::today()->toDateString();
         
-        $this->model->absenMasuk($this->testGuruId, $date, '07:00:00');
-        $idPresensi = $this->model->cekAbsen($this->testGuruId, $date);
+        $this->model->absenMasuk($this->testmemberId, $date, '07:00:00');
+        $idPresensi = $this->model->cekAbsen($this->testmemberId, $date);
         
         // Update only jam_masuk
         $this->model->updatePresensi(
             $idPresensi,
-            $this->testGuruId,
+            $this->testmemberId,
             $date,
             Kehadiran::Hadir->value,
             '06:30:00',
@@ -367,13 +367,13 @@ final class PresensiGuruModelTest extends CIUnitTestCase
     {
         $date = Time::today()->toDateString();
         
-        $this->model->absenMasuk($this->testGuruId, $date, '07:00:00');
-        $idPresensi = $this->model->cekAbsen($this->testGuruId, $date);
+        $this->model->absenMasuk($this->testmemberId, $date, '07:00:00');
+        $idPresensi = $this->model->cekAbsen($this->testmemberId, $date);
         
         // Update only jam_keluar
         $this->model->updatePresensi(
             $idPresensi,
-            $this->testGuruId,
+            $this->testmemberId,
             $date,
             Kehadiran::Hadir->value,
             null,
@@ -391,7 +391,7 @@ final class PresensiGuruModelTest extends CIUnitTestCase
     {
         $date = Time::today()->toDateString();
         
-        $this->model->absenMasuk($this->testGuruId, $date, '07:00:00');
+        $this->model->absenMasuk($this->testmemberId, $date, '07:00:00');
         
         $result = $this->model->getPresensiByKehadiran('1', $date);
         

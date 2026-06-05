@@ -29,21 +29,21 @@ class CreateDB extends Migration
         $this->forge->createTable('tb_kehadiran', true);
 
         // ====================================
-        // Table: tb_guru
+        // Table: tb_member
         // ====================================
         $this->forge->addField([
-            'id_guru' => [
+            'id_member' => [
                 'type'           => 'INT',
                 'constraint'     => 11,
                 'unsigned'       => false,
                 'auto_increment' => true,
             ],
-            'nuptk' => [
+            '' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 24,
                 'null'       => false,
             ],
-            'nama_guru' => [
+            'nama_member' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
                 'null'       => false,
@@ -69,9 +69,9 @@ class CreateDB extends Migration
             ],
         ]);
 
-        $this->forge->addKey('id_guru', true);
+        $this->forge->addKey('id_member', true);
         $this->forge->addUniqueKey('unique_code');
-        $this->forge->createTable('tb_guru', true);
+        $this->forge->createTable('tb_member', true);
 
         // ====================================
         // Table: tb_siswa
@@ -123,7 +123,7 @@ class CreateDB extends Migration
         $this->forge->createTable('tb_siswa', true);
 
         // ====================================
-        // Table: tb_presensi_guru
+        // Table: tb_presensi_member
         // ====================================
         $this->forge->addField([
             'id_presensi' => [
@@ -132,7 +132,7 @@ class CreateDB extends Migration
                 'unsigned'       => false,
                 'auto_increment' => true,
             ],
-            'id_guru' => [
+            'id_member' => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => false,
@@ -164,11 +164,11 @@ class CreateDB extends Migration
         ]);
 
         $this->forge->addKey('id_presensi', true);
-        $this->forge->addKey('id_guru');
+        $this->forge->addKey('id_member');
         $this->forge->addKey('id_kehadiran');
         $this->forge->addForeignKey('id_kehadiran', 'tb_kehadiran', 'id_kehadiran', 'RESTRICT', 'CASCADE');
-        $this->forge->addForeignKey('id_guru', 'tb_guru', 'id_guru', 'SET NULL', 'CASCADE');
-        $this->forge->createTable('tb_presensi_guru', true);
+        $this->forge->addForeignKey('id_member', 'tb_member', 'id_member', 'SET NULL', 'CASCADE');
+        $this->forge->createTable('tb_presensi_member', true);
 
         // ====================================
         // Table: tb_presensi_siswa
@@ -231,9 +231,9 @@ class CreateDB extends Migration
     {
         // Drop tables in reverse order (respecting foreign key constraints)
         $this->forge->dropTable('tb_presensi_siswa', true);
-        $this->forge->dropTable('tb_presensi_guru', true);
+        $this->forge->dropTable('tb_presensi_member', true);
         $this->forge->dropTable('tb_siswa', true);
-        $this->forge->dropTable('tb_guru', true);
+        $this->forge->dropTable('tb_member', true);
         $this->forge->dropTable('tb_kehadiran', true);
     }
 }

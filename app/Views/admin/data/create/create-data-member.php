@@ -6,7 +6,7 @@
          <div class="col-lg-12 col-md-12">
             <div class="card">
                <div class="card-header card-header-success">
-                  <h4 class="card-title"><b>Form Tambah Guru</b></h4>
+                  <h4 class="card-title"><b>Form Tambah member</b></h4>
 
                </div>
                <div class="card-body mx-5 my-3">
@@ -22,19 +22,9 @@
                      </div>
                   <?php endif; ?>
 
-                  <form action="<?= base_url('admin/guru/create'); ?>" method="post">
+                  <form action="<?= base_url('admin/member/create'); ?>" method="post">
                      <?= csrf_field() ?>
                      <?php $validation = \Config\Services::validation(); ?>
-
-                     <div class="form-group mt-4">
-                        <label for="nuptk">NUPTK</label>
-                        <input type="text" id="nuptk"
-                           class="form-control <?= $validation->getError('nuptk') ? 'is-invalid' : ''; ?>" name="nuptk"
-                           placeholder="1234" value="<?= old('nuptk') ?? $oldInput['nuptk'] ?? '' ?>">
-                        <div class="invalid-feedback">
-                           <?= $validation->getError('nuptk'); ?>
-                        </div>
-                     </div>
 
                      <div class="form-group mt-4">
                         <label for="nama">Nama Lengkap</label>
@@ -103,6 +93,18 @@
                            <?= $validation->getError('no_hp'); ?>
                         </div>
                      </div>
+
+                     <div class="form-group mt-4">
+    <label>Paket Membership</label>
+
+    <select name="paket" class="form-control" required>
+        <option value="">Pilih Paket</option>
+        <option value="1 Bulan">1 Bulan</option>
+        <option value="3 Bulan">3 Bulan</option>
+        <option value="6 Bulan">6 Bulan</option>
+        <option value="1 Tahun">1 Tahun</option>
+    </select>
+</div>       
 
                      <div class="form-group mt-4">
                         <label for="rfid">RFID Code</label>

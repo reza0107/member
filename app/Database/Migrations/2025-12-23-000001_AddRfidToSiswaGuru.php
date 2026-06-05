@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddRfidToSiswaGuru extends Migration
+class AddRfidToSiswamember extends Migration
 {
     public function up()
     {
@@ -25,10 +25,10 @@ class AddRfidToSiswaGuru extends Migration
         $this->forge->addKey('rfid_code');
         $this->db->query('CREATE INDEX idx_tb_siswa_rfid_code ON tb_siswa(rfid_code)');
 
-        // Add rfid_code column to tb_guru
-        $this->forge->addColumn('tb_guru', $fields);
+        // Add rfid_code column to tb_member
+        $this->forge->addColumn('tb_member', $fields);
         $this->forge->addKey('rfid_code');
-        $this->db->query('CREATE INDEX idx_tb_guru_rfid_code ON tb_guru(rfid_code)');
+        $this->db->query('CREATE INDEX idx_tb_member_rfid_code ON tb_member(rfid_code)');
     }
 
     public function down()
@@ -40,8 +40,8 @@ class AddRfidToSiswaGuru extends Migration
             $this->forge->dropColumn('tb_siswa', 'rfid_code');
         }
 
-        if ($db->fieldExists('rfid_code', 'tb_guru')) {
-            $this->forge->dropColumn('tb_guru', 'rfid_code');
+        if ($db->fieldExists('rfid_code', 'tb_member')) {
+            $this->forge->dropColumn('tb_member', 'rfid_code');
         }
     }
 }

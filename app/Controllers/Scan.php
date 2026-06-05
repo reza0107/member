@@ -3,9 +3,9 @@
 namespace App\Controllers;
 
 use CodeIgniter\I18n\Time;
-use App\Models\GuruModel;
+use App\Models\memberModel;
 use App\Models\SiswaModel;
-use App\Models\PresensiGuruModel;
+use App\Models\PresensimemberModel;
 use App\Models\PresensiSiswaModel;
 use App\Libraries\enums\TipeUser;
 
@@ -14,24 +14,24 @@ class Scan extends BaseController
    private bool $WANotificationEnabled;
 
    protected SiswaModel $siswaModel;
-   protected GuruModel $guruModel;
+   protected memberModel $memberModel;
 
    protected PresensiSiswaModel $presensiSiswaModel;
-   protected PresensiGuruModel $presensiGuruModel;
+   protected PresensimemberModel $presensimemberModel;
 
    public function __construct()
    {
       $this->WANotificationEnabled = getenv('WA_NOTIFICATION') === 'true' ? true : false;
 
       $this->siswaModel = new SiswaModel();
-      $this->guruModel = new GuruModel();
+      $this->memberModel = new memberModel();
       $this->presensiSiswaModel = new PresensiSiswaModel();
-      $this->presensiGuruModel = new PresensiGuruModel();
+      $this->presensimemberModel = new PresensimemberModel();
    }
 
    public function index($t = 'Masuk')
    {
-      $data = ['waktu' => $t, 'title' => 'Absensi Siswa dan Guru Berbasis QR Code'];
+      $data = ['waktu' => $t, 'title' => 'Absensi Siswa dan member Berbasis QR Code'];
       return view('scan/scan', $data);
    }
 
@@ -48,16 +48,25 @@ class Scan extends BaseController
       $result = $this->siswaModel->cekSiswa($uniqueCode);
 
       if (empty($result)) {
-         // jika cek siswa gagal, cek data guru
-         $result = $this->guruModel->cekGuru($uniqueCode);
+         $result = $this->memberModel->cekmember($uniqueCode);
 
          if (!empty($result)) {
             $status = true;
+            $type = TipeUser::member;
 
-            $type = TipeUser::Guru;
+            // CEK MASA AKTIF MEMBER
+            if (strtotime($result['tanggal_expired']) < strtotime(date('Y-m-d'))) {
+
+               return $this->showErrorView(
+                  'Member Anda sudah expired, mohon langganan kembali.',
+                  [
+                     'type' => TipeUser::member,
+                     'data' => $result
+                  ]
+               );
+            }
          } else {
             $status = false;
-
             $result = NULL;
          }
       } else {
@@ -95,20 +104,30 @@ class Scan extends BaseController
       $messageString = " sudah absen masuk pada tanggal $date jam $time";
       // absen masuk
       switch ($type) {
-         case TipeUser::Guru:
-            $idGuru = $result['id_guru'];
-            $data['type'] = TipeUser::Guru;
+         case TipeUser::member:
+            $idmember = $result['id_member'];
+            $data['type'] = TipeUser::member;
 
-            $sudahAbsen = $this->presensiGuruModel->cekAbsen($idGuru, $date);
+            $sudahAbsen = $this->presensimemberModel->cekAbsen($idmember, $date);
 
             if ($sudahAbsen) {
-               $data['presensi'] = $this->presensiGuruModel->getPresensiById($sudahAbsen);
-               return $this->showErrorView('Anda sudah absen hari ini', $data);
+
+               $this->presensimemberModel->update($sudahAbsen, [
+                  'jam_masuk' => $time
+               ]);
+
+               $data['presensi'] = $this->presensimemberModel->getPresensiById($sudahAbsen);
+
+               return view('scan/scan-result', $data);
             }
 
-            $this->presensiGuruModel->absenMasuk($idGuru, $date, $time);
-            $messageString = $result['nama_guru'] . ' dengan NIP ' . $result['nuptk'] . $messageString;
-            $data['presensi'] = $this->presensiGuruModel->getPresensiByIdGuruTanggal($idGuru, $date);
+            $this->presensimemberModel->absenMasuk($idmember, $date, $time);
+
+            echo '<pre>';
+
+            $cek = $this->presensimemberModel->getPresensiByIdmemberTanggal($idmember, $date);
+            $messageString = $result['nama_member'] . ' dengan ID Member ' . $result['id_member'] . $messageString;
+            $data['presensi'] = $this->presensimemberModel->getPresensiByIdmemberTanggal($idmember, $date);
 
             break;
 
@@ -162,19 +181,19 @@ class Scan extends BaseController
 
       // absen pulang
       switch ($type) {
-         case TipeUser::Guru:
-            $idGuru = $result['id_guru'];
-            $data['type'] = TipeUser::Guru;
+         case TipeUser::member:
+            $idmember = $result['id_member'];
+            $data['type'] = TipeUser::member;
 
-            $sudahAbsen = $this->presensiGuruModel->cekAbsen($idGuru, $date);
+            $sudahAbsen = $this->presensimemberModel->cekAbsen($idmember, $date);
 
             if (!$sudahAbsen) {
                return $this->showErrorView('Anda belum absen hari ini', $data);
             }
 
-            $this->presensiGuruModel->absenKeluar($sudahAbsen, $time);
-            $messageString = $result['nama_guru'] . ' dengan NIP ' . $result['nuptk'] . $messageString;
-            $data['presensi'] = $this->presensiGuruModel->getPresensiById($sudahAbsen);
+            $this->presensimemberModel->absenKeluar($sudahAbsen, $time);
+            $messageString = $result['nama_member'] . ' dengan ID Member ' . $result['id_member'] . $messageString;
+            $data['presensi'] = $this->presensimemberModel->getPresensiById($sudahAbsen);
 
             break;
 

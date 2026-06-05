@@ -1,13 +1,8 @@
 <?php
 $context = $ctx ?? 'dashboard';
 switch ($context) {
-   case 'absen-siswa':
-   case 'siswa':
-   case 'kelas':
-      $sidebarColor = 'purple';
-      break;
-   case 'absen-guru':
-   case 'guru':
+   case 'absen-member':
+   case 'member':
       $sidebarColor = 'green';
       break;
 
@@ -31,11 +26,8 @@ if (is_wali_kelas()) {
 } else {
    $menuItems = [
       ['title' => 'Dashboard', 'url' => 'admin/dashboard', 'icon' => 'dashboard', 'context' => 'dashboard', 'visible' => true],
-      ['title' => 'Absensi Siswa', 'url' => 'admin/absen-siswa', 'icon' => 'checklist', 'context' => 'absen-siswa', 'visible' => true],
-      ['title' => 'Absensi Guru', 'url' => 'admin/absen-guru', 'icon' => 'checklist', 'context' => 'absen-guru', 'visible' => true],
-      ['title' => 'Data Siswa', 'url' => 'admin/siswa', 'icon' => 'person', 'context' => 'siswa', 'visible' => is_superadmin()],
-      ['title' => 'Data Guru', 'url' => 'admin/guru', 'icon' => 'person_4', 'context' => 'guru', 'visible' => is_superadmin()],
-      ['title' => 'Data Kelas & Jurusan', 'url' => 'admin/kelas', 'icon' => 'school', 'context' => 'kelas', 'visible' => is_superadmin()],
+      ['title' => 'Absensi member', 'url' => 'admin/absen-member', 'icon' => 'checklist', 'context' => 'absen-member', 'visible' => true],
+      ['title' => 'Data member', 'url' => 'admin/member', 'icon' => 'person_4', 'context' => 'member', 'visible' => is_superadmin()],
       ['title' => 'Generate QR Code', 'url' => 'admin/generate', 'icon' => 'qr_code', 'context' => 'qr', 'visible' => can_generate_qr()],
       ['title' => 'Generate Laporan', 'url' => 'admin/laporan', 'icon' => 'print', 'context' => 'laporan', 'visible' => can_view_report()],
       ['title' => 'Data Petugas', 'url' => 'admin/petugas', 'icon' => 'computer', 'context' => 'petugas', 'visible' => is_superadmin()],
@@ -44,7 +36,7 @@ if (is_wali_kelas()) {
    ];
 }
 ?>
-<div class="sidebar" data-color="<?= $sidebarColor; ?>" data-image="<?= base_url('assets/img/sidebar/sidebar-3.jpg'); ?>">
+<div class="sidebar" data-color="<?= $sidebarColor; ?>" data-image="<?= base_url('assets/img/sidebar/RajaGym.jpeg'); ?>">
    <!-- data-background-color="black/red" -->
    <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"

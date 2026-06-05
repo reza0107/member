@@ -7,7 +7,7 @@
     background-color: rgb(186, 124, 222);
   }
 
-  .progress-guru {
+  .progress-member {
     height: 5px;
     border-radius: 0px;
     background-color: rgb(58, 192, 85);
@@ -35,7 +35,7 @@
         <div class="card">
           <div class="card-header card-header-danger">
             <h4 class="card-title"><b>Generate QR Code</b></h4>
-            <p class="card-category">Generate QR berdasarkan kode unik data siswa/guru</p>
+            <p class="card-category">Generate QR berdasarkan kode unik data siswa/member</p>
           </div>
           <div class="card-body">
             <div class="row">
@@ -149,14 +149,14 @@
               <div class="col-md-6">
                 <div class="card">
                   <div class="card-body">
-                    <h4 class="text-success"><b>Data Guru</b></h4>
-                    <p>Total jumlah guru : <b><?= count($guru); ?></b>
+                    <h4 class="text-success"><b>Data member</b></h4>
+                    <p>Total jumlah member : <b><?= count($member); ?></b>
                       <br>
-                      <a href="<?= base_url('admin/guru'); ?>" class="text-success">Lihat data</a>
+                      <a href="<?= base_url('admin/member'); ?>" class="text-success">Lihat data</a>
                     </p>
                     <div class="row px-2">
                       <div class="col-12 col-xl-6 px-1">
-                        <button onclick="generateAllQrGuru()" class="btn btn-success p-2 px-md-4 w-100">
+                        <button onclick="generateAllQrmember()" class="btn btn-success p-2 px-md-4 w-100">
                           <div class="d-flex align-items-center justify-content-center" style="gap: 12px;">
                             <div>
                               <i class="material-icons" style="font-size: 24px;">qr_code</i>
@@ -164,11 +164,11 @@
                             <div>
                               <h4 class="d-inline font-weight-bold">Generate All</h4>
                               <div>
-                                <div id="progressGuru" class="d-none mt-2">
-                                  <span id="progressTextGuru"></span>
-                                  <i id="progressSelesaiGuru" class="material-icons d-none" class="d-none">check</i>
-                                  <div class="progress progress-guru">
-                                    <div id="progressBarGuru" class="progress-bar my-progress-bar bg-white"
+                                <div id="progressmember" class="d-none mt-2">
+                                  <span id="progressTextmember"></span>
+                                  <i id="progressSelesaimember" class="material-icons d-none" class="d-none">check</i>
+                                  <div class="progress progress-member">
+                                    <div id="progressBarmember" class="progress-bar my-progress-bar bg-white"
                                       style="width: 0%;" role="progressbar" aria-valuenow="" aria-valuemin=""
                                       aria-valuemax=""></div>
                                   </div>
@@ -179,7 +179,7 @@
                         </button>
                       </div>
                       <div class="col-12 col-xl-6 px-1">
-                        <a href="<?= base_url('admin/qr/guru/download'); ?>" class="btn btn-success p-2 px-md-4 w-100">
+                        <a href="<?= base_url('admin/qr/member/download'); ?>" class="btn btn-success p-2 px-md-4 w-100">
                           <div class="d-flex align-items-center justify-content-center" style="gap: 12px;">
                             <div>
                               <i class="material-icons" style="font-size: 24px;">cloud_download</i>
@@ -196,8 +196,8 @@
                     <br>
                     <br>
                     <p>
-                      Untuk generate/download QR Code per masing-masing guru kunjungi
-                      <a href="<?= base_url('admin/guru'); ?>" class="text-success"><b>data guru</b></a>
+                      Untuk generate/download QR Code per masing-masing member kunjungi
+                      <a href="<?= base_url('admin/member'); ?>" class="text-success"><b>data member</b></a>
                     </p>
                   </div>
                 </div>
@@ -217,12 +217,12 @@
 
 <?= $this->section('scripts') ?>
 <script>
-  const dataGuru = [
-    <?php foreach ($guru as $value) {
+  const datamember = [
+    <?php foreach ($member as $value) {
       echo "{
-              'nama' : `$value[nama_guru]`,
+              'nama' : `$value[nama_member]`,
               'unique_code' : `$value[unique_code]`,
-              'nomor' : `$value[nuptk]`
+              'nomor' : `$value[id_member]`
             },";
     }
     ; ?>
@@ -352,18 +352,18 @@
     });
   }
 
-  function generateAllQrGuru() {
+  function generateAllQrmember() {
     var i = 1;
-    $('#progressGuru').removeClass('d-none');
-    $('#progressBarGuru')
+    $('#progressmember').removeClass('d-none');
+    $('#progressBarmember')
       .attr('aria-valuenow', '0')
       .attr('aria-valuemin', '0')
-      .attr('aria-valuemax', dataGuru.length)
+      .attr('aria-valuemax', datamember.length)
       .attr('style', 'width: 0%;');
 
-    dataGuru.forEach(element => {
+    datamember.forEach(element => {
       jQuery.ajax({
-        url: "<?= base_url('admin/generate/guru'); ?>",
+        url: "<?= base_url('admin/generate/member'); ?>",
         type: 'post',
         data: {
           nama: element['nama'],
@@ -372,16 +372,16 @@
         },
         success: function (response) {
           if (!response) return;
-          if (i != dataGuru.length) {
-            $('#progressTextGuru').html('Progres: ' + i + '/' + dataGuru.length);
+          if (i != datamember.length) {
+            $('#progressTextmember').html('Progres: ' + i + '/' + datamember.length);
           } else {
-            $('#progressTextGuru').html('Progres: ' + i + '/' + dataGuru.length + ' selesai');
-            $('#progressSelesaiGuru').removeClass('d-none');
+            $('#progressTextmember').html('Progres: ' + i + '/' + datamember.length + ' selesai');
+            $('#progressSelesaimember').removeClass('d-none');
           }
 
-          $('#progressBarGuru')
+          $('#progressBarmember')
             .attr('aria-valuenow', i)
-            .attr('style', 'width: ' + (i / dataGuru.length) * 100 + '%;');
+            .attr('style', 'width: ' + (i / datamember.length) * 100 + '%;');
           i++;
         }
       });

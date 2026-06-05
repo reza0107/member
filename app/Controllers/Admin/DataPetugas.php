@@ -12,7 +12,7 @@ use App\Libraries\enums\UserRole;
 class DataPetugas extends BaseController
 {
    protected PetugasModel $petugasModel;
-   protected \App\Models\GuruModel $guruModel;
+   protected \App\Models\memberModel $memberModel;
    protected \App\Models\UploadModel $uploadModel;
 
    protected $petugasValidationRules = [
@@ -45,7 +45,7 @@ class DataPetugas extends BaseController
    public function __construct()
    {
       $this->petugasModel = new PetugasModel();
-      $this->guruModel = new \App\Models\GuruModel();
+      $this->memberModel = new \App\Models\memberModel();
       $this->uploadModel = new \App\Models\UploadModel();
    }
 
@@ -84,7 +84,7 @@ class DataPetugas extends BaseController
       $data = [
          'title' => 'Register Petugas',
          'ctx' => 'petugas',
-         'guru' => $this->guruModel->getAllGuru(),
+         'member' => $this->memberModel->getAllmember(),
          'roles' => UserRole::ALL_ROLES
       ];
 
@@ -110,9 +110,9 @@ class DataPetugas extends BaseController
       $password = $this->request->getVar('password');
       $passwordHash = Password::hash($password);
       $role = $this->request->getVar('role');
-      $id_guru = $this->request->getVar('id_guru') ?: null;
+      $id_member = $this->request->getVar('id_member') ?: null;
 
-      $result = $this->petugasModel->savePetugas(null, $email, $username, $passwordHash, $role, $id_guru, 1);
+      $result = $this->petugasModel->savePetugas(null, $email, $username, $passwordHash, $role, $id_member, 1);
 
       if ($result) {
          session()->setFlashdata([
@@ -141,7 +141,7 @@ class DataPetugas extends BaseController
          'data' => $petugas,
          'ctx' => 'petugas',
          'title' => 'Edit Data Petugas',
-         'guru' => $this->guruModel->getAllGuru(),
+         'member' => $this->memberModel->getAllmember(),
          'roles' => UserRole::ALL_ROLES
       ];
 
@@ -170,7 +170,7 @@ class DataPetugas extends BaseController
             'title' => 'Edit Data Petugas',
             'validation' => $this->validator,
             'oldInput' => $this->request->getVar(),
-            'guru' => $this->guruModel->getAllGuru(),
+            'member' => $this->memberModel->getAllmember(),
             'roles' => UserRole::ALL_ROLES
          ];
          return view('admin/petugas/edit-data-petugas', $data);
@@ -182,7 +182,7 @@ class DataPetugas extends BaseController
       $username = $this->request->getVar('username');
       $passwordHash = $password ? Password::hash($password) : $petugasLama['password_hash'];
       $role = $this->request->getVar('role');
-      $id_guru = $this->request->getVar('id_guru') ?: null;
+      $id_member = $this->request->getVar('id_member') ?: null;
 
       $result = $this->petugasModel->savePetugas(
          $idPetugas,
@@ -190,7 +190,7 @@ class DataPetugas extends BaseController
          $username,
          $passwordHash,
          $role,
-         $id_guru,
+         $id_member,
          $petugasLama['active']
       );
 
@@ -267,7 +267,7 @@ class DataPetugas extends BaseController
 
       $data['title'] = 'Import Petugas';
       $data['ctx'] = 'petugas';
-      $data['guru'] = $this->guruModel->getAllGuru();
+      $data['member'] = $this->memberModel->getAllmember();
 
       return view('admin/petugas/import-petugas', $data);
    }

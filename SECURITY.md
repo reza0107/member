@@ -9,4 +9,4 @@
 
 ## Reporting a Vulnerability
 
-Just [create new issue](https://github.com/ikhsan3adi/absensi-sekolah-qr-code/issues).
+Just [create new issue](https://github.com/ikhsan3adi/absensi-perusahaan-qr-code/issues).

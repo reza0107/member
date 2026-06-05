@@ -10,14 +10,14 @@ class KelasController extends BaseController
 {
     protected KelasModel $kelasModel;
     protected JurusanModel $jurusanModel;
-    protected \App\Models\GuruModel $guruModel;
+    protected \App\Models\memberModel $memberModel;
 
     public function initController(\CodeIgniter\HTTP\RequestInterface $request, \CodeIgniter\HTTP\ResponseInterface $response, \Psr\Log\LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
         $this->kelasModel = new KelasModel();
         $this->jurusanModel = new JurusanModel();
-        $this->guruModel = new \App\Models\GuruModel();
+        $this->memberModel = new \App\Models\memberModel();
     }
 
     /**
@@ -71,7 +71,7 @@ class KelasController extends BaseController
         $data['ctx'] = 'kelas';
         $data['title'] = 'Tambah Data Kelas';
         $data['jurusan'] = $this->jurusanModel->findAll();
-        $data['guru'] = $this->guruModel->getAllGuru();
+        $data['member'] = $this->memberModel->getAllmember();
 
         return view('/admin/kelas/create', $data);
     }
@@ -113,7 +113,7 @@ class KelasController extends BaseController
         $data['title'] = 'Edit Kelas';
         $data['ctx'] = 'kelas';
         $data['jurusan'] = $this->jurusanModel->findAll();
-        $data['guru'] = $this->guruModel->getAllGuru();
+        $data['member'] = $this->memberModel->getAllmember();
         $data['kelas'] = $this->kelasModel->getKelas($id);
         if (empty($data['kelas'])) {
             return redirect()->to('admin/kelas');

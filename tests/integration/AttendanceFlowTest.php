@@ -33,11 +33,11 @@ final class AttendanceFlowTest extends CIUnitTestCase
     protected $seedOnce    = true;
 
     protected $testSiswaId;
-    protected $testGuruId;
+    protected $testmemberId;
     protected $testKelasId;
     protected $testJurusanId;
     protected string $siswaUniqueCode;
-    protected string $guruUniqueCode;
+    protected string $memberUniqueCode;
 
     protected function setUp(): void
     {
@@ -70,17 +70,17 @@ final class AttendanceFlowTest extends CIUnitTestCase
         ]);
         $this->testSiswaId = $this->db->insertID();
         
-        // Create test guru
-        $this->guruUniqueCode = uniqid('test-guru-');
-        $this->db->table('tb_guru')->insert([
-            'nuptk' => '1234567890123456',
-            'nama_guru' => 'Test Guru Integration',
+        // Create test member
+        $this->memberUniqueCode = uniqid('test-member-');
+        $this->db->table('tb_member')->insert([
+            '' => '1234567890123456',
+            'nama_member' => 'Test member Integration',
             'jenis_kelamin' => 'L',
             'alamat' => 'Jl. Test',
             'no_hp' => '08123456788',
-            'unique_code' => $this->guruUniqueCode,
+            'unique_code' => $this->memberUniqueCode,
         ]);
-        $this->testGuruId = $this->db->insertID();
+        $this->testmemberId = $this->db->insertID();
         
         $this->login();
     }
@@ -92,7 +92,7 @@ final class AttendanceFlowTest extends CIUnitTestCase
         $this->logout();
 
         $this->db->table('tb_siswa')->delete(['id_siswa' => $this->testSiswaId]);
-        $this->db->table('tb_guru')->delete(['id_guru' => $this->testGuruId]);
+        $this->db->table('tb_member')->delete(['id_member' => $this->testmemberId]);
         $this->db->table('tb_kelas')->delete(['id_kelas' => $this->testKelasId]);
         $this->db->table('tb_jurusan')->delete(['id' => $this->testJurusanId]);
     }
@@ -273,16 +273,16 @@ final class AttendanceFlowTest extends CIUnitTestCase
         $date = Time::today()->toDateString();
         
         $result = $this->withSession()->post('/scan/cek', [
-            'unique_code' => $this->guruUniqueCode,
+            'unique_code' => $this->memberUniqueCode,
             'waktu' => 'masuk'
         ]);
         
         $result->assertStatus(200);
-        $result->assertSee('Test Guru Integration');
+        $result->assertSee('Test member Integration');
         
         // Verify attendance record
-        $attendance = $this->db->table('tb_presensi_guru')
-            ->where('id_guru', $this->testGuruId)
+        $attendance = $this->db->table('tb_presensi_member')
+            ->where('id_member', $this->testmemberId)
             ->where('tanggal', $date)
             ->get()
             ->getRowArray();

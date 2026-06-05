@@ -6,7 +6,7 @@
             <th><b>Username</b></th>
             <th><b>Email</b></th>
             <th><b>Role</b></th>
-            <th><b>Guru</b></th>
+            <th><b>member</b></th>
             <th><b>Status</b></th>
             <th><b>Aksi</b></th>
          </thead>
@@ -20,7 +20,7 @@
                   <td>
                      <?= getUserRole($value['is_superadmin']); ?>
                   </td>
-                  <td><?= $value['nama_guru'] ?? '-'; ?></td>
+                  <td><?= $value['nama_member'] ?? '-'; ?></td>
                   <td>
                      <?php if (($value['active'] ?? 0) == 1): ?>
                         <span class="badge badge-success">Aktif</span>

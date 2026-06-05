@@ -22,11 +22,11 @@ class AddWaliKelasToKelas extends Migration
         ]);
 
         // Add foreign key for id_wali_kelas to tb_kelas
-        $this->db->query('ALTER TABLE tb_kelas ADD CONSTRAINT fk_tb_kelas_id_wali_kelas FOREIGN KEY (id_wali_kelas) REFERENCES tb_guru(id_guru) ON UPDATE NO ACTION ON DELETE RESTRICT');
+        $this->db->query('ALTER TABLE tb_kelas ADD CONSTRAINT fk_tb_kelas_id_wali_kelas FOREIGN KEY (id_wali_kelas) REFERENCES tb_member(id_member) ON UPDATE NO ACTION ON DELETE RESTRICT');
 
-        // Add id_guru column to users table (Myth\Auth)
+        // Add id_member column to users table (Myth\Auth)
         $this->forge->addColumn('users', [
-            'id_guru' => [
+            'id_member' => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => false,
@@ -35,8 +35,8 @@ class AddWaliKelasToKelas extends Migration
             ],
         ]);
 
-        // Add foreign key for id_guru in users table
-        $this->db->query('ALTER TABLE users ADD CONSTRAINT fk_users_id_guru FOREIGN KEY (id_guru) REFERENCES tb_guru(id_guru) ON UPDATE NO ACTION ON DELETE RESTRICT');
+        // Add foreign key for id_member in users table
+        $this->db->query('ALTER TABLE users ADD CONSTRAINT fk_users_id_member FOREIGN KEY (id_member) REFERENCES tb_member(id_member) ON UPDATE NO ACTION ON DELETE RESTRICT');
     }
 
     public function down()
@@ -44,9 +44,9 @@ class AddWaliKelasToKelas extends Migration
         $db = \Config\Database::connect();
 
         // Drop foreign keys first
-        if ($db->fieldExists('id_guru', 'users')) {
-            $this->db->query('ALTER TABLE users DROP FOREIGN KEY fk_users_id_guru');
-            $this->forge->dropColumn('users', 'id_guru');
+        if ($db->fieldExists('id_member', 'users')) {
+            $this->db->query('ALTER TABLE users DROP FOREIGN KEY fk_users_id_member');
+            $this->forge->dropColumn('users', 'id_member');
         }
 
         if ($db->fieldExists('id_wali_kelas', 'tb_kelas')) {

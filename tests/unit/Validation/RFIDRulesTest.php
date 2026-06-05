@@ -4,7 +4,7 @@ namespace Tests\Unit\Validation;
 
 use App\Validation\RFIDRules;
 use App\Models\SiswaModel;
-use App\Models\GuruModel;
+use App\Models\memberModel;
 use CodeIgniter\Test\CIUnitTestCase;
 use CodeIgniter\Test\DatabaseTestTrait;
 
@@ -67,10 +67,10 @@ final class RFIDRulesTest extends CIUnitTestCase
         $this->assertNull($error);
     }
 
-    public function testIsRfidUniqueForNewGuruWithUniqueCode(): void
+    public function testIsRfidUniqueForNewmemberWithUniqueCode(): void
     {
         $error = null;
-        $result = $this->rules->is_rfid_unique('RFID123456', ',guru', [], $error);
+        $result = $this->rules->is_rfid_unique('RFID123456', ',member', [], $error);
         
         $this->assertTrue($result);
         $this->assertNull($error);
@@ -93,17 +93,17 @@ final class RFIDRulesTest extends CIUnitTestCase
         $this->assertEquals('RFID code ini sudah digunakan oleh Siswa.', $error);
     }
 
-    public function testIsRfidUniqueReturnsFalseWhenCodeExistsInGuru(): void
+    public function testIsRfidUniqueReturnsFalseWhenCodeExistsInmember(): void
     {
         // Create a teacher with RFID
-        $guruModel = new GuruModel();
-        $guruModel->createGuru('1234567890123456', 'Test Guru', 'L', 'Jl. Test', '08123456789', 'RFID123456');
+        $memberModel = new memberModel();
+        $memberModel->createmember('1234567890123456', 'Test member', 'L', 'Jl. Test', '08123456789', 'RFID123456');
         
         $error = null;
-        $result = $this->rules->is_rfid_unique('RFID123456', ',guru', [], $error);
+        $result = $this->rules->is_rfid_unique('RFID123456', ',member', [], $error);
         
         $this->assertFalse($result);
-        $this->assertEquals('RFID code ini sudah digunakan oleh Guru.', $error);
+        $this->assertEquals('RFID code ini sudah digunakan oleh member.', $error);
     }
 
     public function testIsRfidUniqueChecksAcrossBothTables(): void
@@ -112,9 +112,9 @@ final class RFIDRulesTest extends CIUnitTestCase
         $siswaModel = new SiswaModel();
         $siswaModel->createSiswa('1001', 'Test Siswa', $this->testKelasId, 'L', '08123456789', 'RFID123456');
         
-        // Try to use same RFID for a guru
+        // Try to use same RFID for a member
         $error = null;
-        $result = $this->rules->is_rfid_unique('RFID123456', ',guru', [], $error);
+        $result = $this->rules->is_rfid_unique('RFID123456', ',member', [], $error);
         
         $this->assertFalse($result);
         $this->assertEquals('RFID code ini sudah digunakan oleh Siswa.', $error);
@@ -143,14 +143,14 @@ final class RFIDRulesTest extends CIUnitTestCase
     public function testIsRfidUniqueExcludesSameTeacherWhenUpdating(): void
     {
         // Create a teacher with RFID
-        $guruModel = new GuruModel();
-        $guruModel->createGuru('1234567890123456', 'Test Guru', 'L', 'Jl. Test', '08123456789', 'RFID123456');
+        $memberModel = new memberModel();
+        $memberModel->createmember('1234567890123456', 'Test member', 'L', 'Jl. Test', '08123456789', 'RFID123456');
         
-        $guru = $this->db->table('tb_guru')->where('nuptk', '1234567890123456')->get()->getRowArray();
+        $member = $this->db->table('tb_member')->where('', '1234567890123456')->get()->getRowArray();
         
         // Update same teacher with same RFID should be allowed
         $error = null;
-        $result = $this->rules->is_rfid_unique('RFID123456', $guru['id_guru'] . ',guru', [], $error);
+        $result = $this->rules->is_rfid_unique('RFID123456', $member['id_member'] . ',member', [], $error);
         
         $this->assertTrue($result);
         $this->assertNull($error);
@@ -209,16 +209,16 @@ final class RFIDRulesTest extends CIUnitTestCase
     {
         // Create a teacher and student with different RFIDs
         $siswaModel = new SiswaModel();
-        $guruModel = new GuruModel();
+        $memberModel = new memberModel();
         
         $siswaModel->createSiswa('1001', 'Test Siswa', $this->testKelasId, 'L', '08123456789', 'RFID_SISWA');
-        $guruModel->createGuru('1234567890123456', 'Test Guru', 'L', 'Jl. Test', '08123456788', 'RFID_GURU');
+        $memberModel->createmember('1234567890123456', 'Test member', 'L', 'Jl. Test', '08123456788', 'RFID_member');
         
-        $guru = $this->db->table('tb_guru')->where('nuptk', '1234567890123456')->get()->getRowArray();
+        $member = $this->db->table('tb_member')->where('', '1234567890123456')->get()->getRowArray();
         
         // Teacher updating with student's RFID should fail
         $error = null;
-        $result = $this->rules->is_rfid_unique('RFID_SISWA', $guru['id_guru'] . ',guru', [], $error);
+        $result = $this->rules->is_rfid_unique('RFID_SISWA', $member['id_member'] . ',member', [], $error);
         
         $this->assertFalse($result);
         $this->assertEquals('RFID code ini sudah digunakan oleh Siswa.', $error);
@@ -264,7 +264,7 @@ final class RFIDRulesTest extends CIUnitTestCase
         $siswaModel->createSiswa('1001', 'Test Siswa', $this->testKelasId, 'L', '08123456789', 'RFID-123_456');
         
         $error = null;
-        $result = $this->rules->is_rfid_unique('RFID-123_456', ',guru', [], $error);
+        $result = $this->rules->is_rfid_unique('RFID-123_456', ',member', [], $error);
         
         $this->assertFalse($result);
         $this->assertEquals('RFID code ini sudah digunakan oleh Siswa.', $error);

@@ -11,13 +11,13 @@ class AttendanceSeeder extends Seeder
   {
     $db = \Config\Database::connect();
     $siswa = $db->table('tb_siswa')->get()->getResultArray();
-    $guru = $db->table('tb_guru')->get()->getResultArray();
+    $member = $db->table('tb_member')->get()->getResultArray();
 
     $daysToSeed = 7;
     $now = Time::now();
 
     $presensiSiswaBatch = [];
-    $presensiGuruBatch = [];
+    $presensimemberBatch = [];
 
     for ($i = 0; $i < $daysToSeed; $i++) {
       $date = $now->subDays($i)->toDateString();
@@ -68,10 +68,10 @@ class AttendanceSeeder extends Seeder
         ];
       }
 
-      // Seed Guru
-      foreach ($guru as $g) {
-        $exists = $db->table('tb_presensi_guru')
-          ->where(['id_guru' => $g['id_guru'], 'tanggal' => $date])
+      // Seed member
+      foreach ($member as $g) {
+        $exists = $db->table('tb_presensi_member')
+          ->where(['id_member' => $g['id_member'], 'tanggal' => $date])
           ->countAllResults();
 
         if ($exists > 0)
@@ -97,8 +97,8 @@ class AttendanceSeeder extends Seeder
           $idKehadiran = 4;
         }
 
-        $presensiGuruBatch[] = [
-          'id_guru' => $g['id_guru'],
+        $presensimemberBatch[] = [
+          'id_member' => $g['id_member'],
           'tanggal' => $date,
           'jam_masuk' => $jamMasuk,
           'jam_keluar' => $jamKeluar,
@@ -112,10 +112,10 @@ class AttendanceSeeder extends Seeder
       $db->table('tb_presensi_siswa')->insertBatch($presensiSiswaBatch);
     }
 
-    if (!empty($presensiGuruBatch)) {
-      $db->table('tb_presensi_guru')->insertBatch($presensiGuruBatch);
+    if (!empty($presensimemberBatch)) {
+      $db->table('tb_presensi_member')->insertBatch($presensimemberBatch);
     }
 
-    echo "Seeding completed. " . count($presensiSiswaBatch) . " siswa and " . count($presensiGuruBatch) . " guru attendance records added.\n";
+    echo "Seeding completed. " . count($presensiSiswaBatch) . " siswa and " . count($presensimemberBatch) . " member attendance records added.\n";
   }
 }

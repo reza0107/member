@@ -145,7 +145,7 @@ CREATE TABLE `auth_users_permissions` (
 CREATE TABLE `general_settings` (
   `id` int(11) UNSIGNED NOT NULL,
   `logo` varchar(225) DEFAULT NULL,
-  `school_name` varchar(225) DEFAULT 'SMK 1 Indonesia',
+  `school_name` varchar(225) DEFAULT 'Raja Gym',
   `school_year` varchar(225) DEFAULT '2024/2025',
   `copyright` varchar(225) DEFAULT '© 2025 All rights reserved.'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
@@ -155,7 +155,7 @@ CREATE TABLE `general_settings` (
 --
 
 INSERT INTO `general_settings` (`id`, `logo`, `school_name`, `school_year`, `copyright`) VALUES
-(1, NULL, 'SMK 1 Indonesia', '2024/2025', '© 2025 All rights reserved.');
+(1, NULL, 'Raja Gym', '2024/2025', '© 2025 All rights reserved.');
 
 -- --------------------------------------------------------
 
@@ -184,19 +184,19 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 (4, '2023-08-18-000003', 'App\\Database\\Migrations\\CreateDB', 'default', 'App', 1770359293, 1),
 (5, '2023-08-18-000004', 'App\\Database\\Migrations\\AddSuperadmin', 'default', 'App', 1770359293, 1),
 (6, '2024-07-24-083011', 'App\\Database\\Migrations\\GeneralSettings', 'default', 'App', 1770359293, 1),
-(7, '2025-12-23-000001', 'App\\Database\\Migrations\\AddRfidToSiswaGuru', 'default', 'App', 1770359293, 1),
+(7, '2025-12-23-000001', 'App\\Database\\Migrations\\AddRfidToSiswamember', 'default', 'App', 1770359293, 1),
 (8, '2025-12-23-000002', 'App\\Database\\Migrations\\AddWaliKelasToKelas', 'default', 'App', 1770359293, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_guru`
+-- Table structure for table `tb_member`
 --
 
-CREATE TABLE `tb_guru` (
-  `id_guru` int(11) NOT NULL,
-  `nuptk` varchar(24) NOT NULL,
-  `nama_guru` varchar(255) NOT NULL,
+CREATE TABLE `tb_member` (
+  `id_member` int(11) NOT NULL,
+  `` varchar(24) NOT NULL,
+  `nama_member` varchar(255) NOT NULL,
   `jenis_kelamin` enum('Laki-laki','Perempuan') NOT NULL,
   `alamat` text NOT NULL,
   `no_hp` varchar(32) NOT NULL,
@@ -287,12 +287,12 @@ INSERT INTO `tb_kelas` (`id_kelas`, `tingkat`, `id_jurusan`, `index_kelas`, `id_
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_presensi_guru`
+-- Table structure for table `tb_presensi_member`
 --
 
-CREATE TABLE `tb_presensi_guru` (
+CREATE TABLE `tb_presensi_member` (
   `id_presensi` int(11) NOT NULL,
-  `id_guru` int(11) DEFAULT NULL,
+  `id_member` int(11) DEFAULT NULL,
   `tanggal` date NOT NULL,
   `jam_masuk` time DEFAULT NULL,
   `jam_keluar` time DEFAULT NULL,
@@ -342,7 +342,7 @@ CREATE TABLE `tb_siswa` (
 
 CREATE TABLE `users` (
   `id` int(11) UNSIGNED NOT NULL,
-  `id_guru` int(11) DEFAULT NULL,
+  `id_member` int(11) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `username` varchar(30) DEFAULT NULL,
   `is_superadmin` tinyint(1) NOT NULL DEFAULT 0,
@@ -364,7 +364,7 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `id_guru`, `email`, `username`, `is_superadmin`, `password_hash`, `reset_hash`, `reset_at`, `reset_expires`, `activate_hash`, `status`, `status_message`, `active`, `force_pass_reset`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `users` (`id`, `id_member`, `email`, `username`, `is_superadmin`, `password_hash`, `reset_hash`, `reset_at`, `reset_expires`, `activate_hash`, `status`, `status_message`, `active`, `force_pass_reset`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, NULL, 'adminsuper@gmail.com', 'superadmin', 1, '$2y$10$A.PPQf3wiSNLLst4go8yQujE1.3dfkJhXdftVTlXv2JUIeEJL3Bky', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, NULL, NULL, NULL);
 
 --
@@ -445,12 +445,12 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tb_guru`
+-- Indexes for table `tb_member`
 --
-ALTER TABLE `tb_guru`
-  ADD PRIMARY KEY (`id_guru`),
+ALTER TABLE `tb_member`
+  ADD PRIMARY KEY (`id_member`),
   ADD UNIQUE KEY `unique_code` (`unique_code`),
-  ADD KEY `idx_tb_guru_rfid_code` (`rfid_code`);
+  ADD KEY `idx_tb_member_rfid_code` (`rfid_code`);
 
 --
 -- Indexes for table `tb_jurusan`
@@ -474,11 +474,11 @@ ALTER TABLE `tb_kelas`
   ADD KEY `fk_tb_kelas_id_wali_kelas` (`id_wali_kelas`);
 
 --
--- Indexes for table `tb_presensi_guru`
+-- Indexes for table `tb_presensi_member`
 --
-ALTER TABLE `tb_presensi_guru`
+ALTER TABLE `tb_presensi_member`
   ADD PRIMARY KEY (`id_presensi`),
-  ADD KEY `id_guru` (`id_guru`),
+  ADD KEY `id_member` (`id_member`),
   ADD KEY `id_kehadiran` (`id_kehadiran`);
 
 --
@@ -506,7 +506,7 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `username` (`username`),
-  ADD KEY `fk_users_id_guru` (`id_guru`);
+  ADD KEY `fk_users_id_member` (`id_member`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -561,10 +561,10 @@ ALTER TABLE `migrations`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `tb_guru`
+-- AUTO_INCREMENT for table `tb_member`
 --
-ALTER TABLE `tb_guru`
-  MODIFY `id_guru` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `tb_member`
+  MODIFY `id_member` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tb_jurusan`
@@ -585,9 +585,9 @@ ALTER TABLE `tb_kelas`
   MODIFY `id_kelas` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `tb_presensi_guru`
+-- AUTO_INCREMENT for table `tb_presensi_member`
 --
-ALTER TABLE `tb_presensi_guru`
+ALTER TABLE `tb_presensi_member`
   MODIFY `id_presensi` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -643,15 +643,15 @@ ALTER TABLE `auth_users_permissions`
 -- Constraints for table `tb_kelas`
 --
 ALTER TABLE `tb_kelas`
-  ADD CONSTRAINT `fk_tb_kelas_id_wali_kelas` FOREIGN KEY (`id_wali_kelas`) REFERENCES `tb_guru` (`id_guru`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_tb_kelas_id_wali_kelas` FOREIGN KEY (`id_wali_kelas`) REFERENCES `tb_member` (`id_member`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `tb_kelas_id_jurusan_foreign` FOREIGN KEY (`id_jurusan`) REFERENCES `tb_jurusan` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
--- Constraints for table `tb_presensi_guru`
+-- Constraints for table `tb_presensi_member`
 --
-ALTER TABLE `tb_presensi_guru`
-  ADD CONSTRAINT `tb_presensi_guru_id_guru_foreign` FOREIGN KEY (`id_guru`) REFERENCES `tb_guru` (`id_guru`) ON DELETE CASCADE ON UPDATE SET NULL,
-  ADD CONSTRAINT `tb_presensi_guru_id_kehadiran_foreign` FOREIGN KEY (`id_kehadiran`) REFERENCES `tb_kehadiran` (`id_kehadiran`) ON DELETE CASCADE;
+ALTER TABLE `tb_presensi_member`
+  ADD CONSTRAINT `tb_presensi_member_id_member_foreign` FOREIGN KEY (`id_member`) REFERENCES `tb_member` (`id_member`) ON DELETE CASCADE ON UPDATE SET NULL,
+  ADD CONSTRAINT `tb_presensi_member_id_kehadiran_foreign` FOREIGN KEY (`id_kehadiran`) REFERENCES `tb_kehadiran` (`id_kehadiran`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `tb_presensi_siswa`
@@ -671,7 +671,7 @@ ALTER TABLE `tb_siswa`
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `fk_users_id_guru` FOREIGN KEY (`id_guru`) REFERENCES `tb_guru` (`id_guru`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_users_id_member` FOREIGN KEY (`id_member`) REFERENCES `tb_member` (`id_member`) ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

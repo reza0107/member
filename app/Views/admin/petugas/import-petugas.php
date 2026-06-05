@@ -66,7 +66,7 @@
                             <div class="card-body">
                                 <form action="<?= base_url('admin/petugas/downloadCSVFilePost'); ?>" method="post">
                                     <?= csrf_field(); ?>
-                                    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#modalGuru">List Guru</button>
+                                    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#modalmember">List member</button>
                                     <button class="btn btn-success btn-block" name="submit" value="csv_petugas_template">Download CSV Template</button>
                                 </form>
                             </div>
@@ -78,11 +78,11 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalGuru" tabindex="-1" aria-labelledby="modalGuruTitle" aria-hidden="true">
+<div class="modal fade" id="modalmember" tabindex="-1" aria-labelledby="modalmemberTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalGuruTitle">List Guru</h5>
+                <h5 class="modal-title" id="modalmemberTitle">List member</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -92,14 +92,14 @@
                     <table class="table table-hover">
                         <thead class="text-primary">
                             <th><b>ID</b></th>
-                            <th><b>Nama Guru</b></th>
+                            <th><b>Nama member</b></th>
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($guru as $value) : ?>
+                            foreach ($member as $value) : ?>
                                 <tr>
-                                    <td><?= $value['id_guru']; ?></td>
-                                    <td><b><?= $value['nama_guru']; ?></b></td>
+                                    <td><?= $value['id_member']; ?></td>
+                                    <td><b><?= $value['nama_member']; ?></b></td>
                                 </tr>
                             <?php
                             endforeach; ?>

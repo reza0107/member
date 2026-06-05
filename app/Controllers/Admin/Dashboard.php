@@ -4,12 +4,12 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 
-use App\Models\GuruModel;
+use App\Models\memberModel;
 use App\Models\JurusanModel;
 use App\Models\SiswaModel;
 use App\Models\KelasModel;
 use App\Models\PetugasModel;
-use App\Models\PresensiGuruModel;
+use App\Models\PresensimemberModel;
 use App\Models\PresensiSiswaModel;
 use CodeIgniter\I18n\Time;
 use App\Libraries\enums\UserRole;
@@ -17,24 +17,24 @@ use App\Libraries\enums\UserRole;
 class Dashboard extends BaseController
 {
    protected SiswaModel $siswaModel;
-   protected GuruModel $guruModel;
+   protected memberModel $memberModel;
 
    protected KelasModel $kelasModel;
    protected JurusanModel $jurusanModel;
 
    protected PresensiSiswaModel $presensiSiswaModel;
-   protected PresensiGuruModel $presensiGuruModel;
+   protected PresensimemberModel $presensimemberModel;
 
    protected PetugasModel $petugasModel;
 
    public function __construct()
    {
       $this->siswaModel = new SiswaModel();
-      $this->guruModel = new GuruModel();
+      $this->memberModel = new memberModel();
       $this->kelasModel = new KelasModel();
       $this->jurusanModel = new JurusanModel();
       $this->presensiSiswaModel = new PresensiSiswaModel();
-      $this->presensiGuruModel = new PresensiGuruModel();
+      $this->presensimemberModel = new PresensimemberModel();
       $this->petugasModel = new PetugasModel();
    }
 
@@ -65,7 +65,7 @@ class Dashboard extends BaseController
 
       // Get attendance trends using new methods
       $grafikKehadiranSiswa = $this->presensiSiswaModel->getAttendanceTrend();
-      $grafikKehadiranGuru = $this->presensiGuruModel->getAttendanceTrend();
+      $grafikKehadiranmember = $this->presensimemberModel->getAttendanceTrend();
 
       // Prepare kelas data with student count
       $kelasData = $this->kelasModel->getDataKelas();
@@ -78,7 +78,7 @@ class Dashboard extends BaseController
          'ctx' => 'dashboard',
 
          'siswa' => $this->siswaModel->getAllSiswaWithKelas(),
-         'guru' => $this->guruModel->getAllGuru(),
+         'member' => $this->memberModel->getAllmember(),
 
          'kelas' => $kelasData,
          'jurusan' => $this->jurusanModel->getDataJurusan(),
@@ -87,7 +87,7 @@ class Dashboard extends BaseController
          'dateNow' => $now->toLocalizedString('d MMMM Y'),
 
          'grafikKehadiranSiswa' => $grafikKehadiranSiswa,
-         'grafikKehadiranGuru' => $grafikKehadiranGuru,
+         'grafikKehadiranmember' => $grafikKehadiranmember,
 
          'jumlahKehadiranSiswa' => [
             'hadir' => count($this->presensiSiswaModel->getPresensiByKehadiran('1', $today)),
@@ -96,15 +96,15 @@ class Dashboard extends BaseController
             'alfa' => count($this->presensiSiswaModel->getPresensiByKehadiran('4', $today))
          ],
 
-         'jumlahKehadiranGuru' => [
-            'hadir' => count($this->presensiGuruModel->getPresensiByKehadiran('1', $today)),
-            'sakit' => count($this->presensiGuruModel->getPresensiByKehadiran('2', $today)),
-            'izin' => count($this->presensiGuruModel->getPresensiByKehadiran('3', $today)),
-            'alfa' => count($this->presensiGuruModel->getPresensiByKehadiran('4', $today))
+         'jumlahKehadiranmember' => [
+            'hadir' => count($this->presensimemberModel->getPresensiByKehadiran('1', $today)),
+            'sakit' => count($this->presensimemberModel->getPresensiByKehadiran('2', $today)),
+            'izin' => count($this->presensimemberModel->getPresensiByKehadiran('3', $today)),
+            'alfa' => count($this->presensimemberModel->getPresensiByKehadiran('4', $today))
          ],
 
          'totalSiswa' => $this->siswaModel->getSiswaCountByKelas(),
-         'totalGuru' => $this->guruModel->countAllResults(),
+         'totalmember' => $this->memberModel->countAllResults(),
 
          'petugas' => $this->petugasModel->getAllPetugas(),
       ];

@@ -24,7 +24,7 @@ class GeneralSettings extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => 225,
                 'null'       => true,
-                'default'    => 'SMK 1 Indonesia',
+                'default'    => 'Raja Gym',
             ],
             'school_year' => [
                 'type'       => 'VARCHAR',

@@ -5,7 +5,7 @@
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <meta name="description" content="Absensi Sekolah QR Code - Sistem absensi modern berbasis QR Code">
+   <meta name="description" content="Absensi perusahaan QR Code - Sistem absensi modern berbasis QR Code">
    <meta name="theme-color" content="#9c27b0">
 
    <?= $this->include("templates/css") ?>
@@ -14,13 +14,13 @@
 
    <style>
       .bg {
-         background: url(<?= base_url("assets/img/city-profile.jpg") ?>) center;
-         opacity: 0.4;
-         background-size: cover;
+         background: url(<?= base_url("assets/img/RajaGym.jpeg") ?>) center;
+         background-size: 80%;
+         background-repeat: no-repeat;
+         opacity: 0.5;
          height: 100vh;
          width: 100%;
          position: fixed;
-         bottom: 0;
          top: 0;
       }
 

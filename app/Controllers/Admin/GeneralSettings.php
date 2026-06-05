@@ -26,7 +26,7 @@ class GeneralSettings extends BaseController
     public function generalSettingsPost()
     {
         $val = \Config\Services::validation();
-        $val->setRule('school_name', 'Nama Sekolah', 'required|max_length[200]');
+        $val->setRule('school_name', 'Nama perusahaan', 'required|max_length[200]');
         $val->setRule('school_year', 'Tahun Ajaran', 'required|max_length[200]');
         $val->setRule('copyright', 'copyright', 'max_length[200]');
 

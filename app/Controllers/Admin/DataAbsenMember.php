@@ -2,26 +2,26 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\GuruModel;
+use App\Models\memberModel;
 
 use App\Controllers\BaseController;
 use App\Models\KehadiranModel;
-use App\Models\PresensiGuruModel;
+use App\Models\PresensimemberModel;
 use CodeIgniter\I18n\Time;
 
-class DataAbsenGuru extends BaseController
+class DataAbsenmember extends BaseController
 {
-   protected GuruModel $guruModel;
+   protected memberModel $memberModel;
 
-   protected PresensiGuruModel $presensiGuru;
+   protected PresensimemberModel $presensimember;
 
    protected KehadiranModel $kehadiranModel;
 
    public function __construct()
    {
-      $this->guruModel = new GuruModel();
+      $this->memberModel = new memberModel();
 
-      $this->presensiGuru = new PresensiGuruModel();
+      $this->presensimember = new PresensimemberModel();
 
       $this->kehadiranModel = new KehadiranModel();
    }
@@ -29,21 +29,21 @@ class DataAbsenGuru extends BaseController
    public function index()
    {
       $data = [
-         'title' => 'Data Absen Guru',
-         'ctx' => 'absen-guru',
+         'title' => 'Data Absen member',
+         'ctx' => 'absen-member',
       ];
 
-      return view('admin/absen/absen-guru', $data);
+      return view('admin/absen/absen-member', $data);
    }
 
-   public function ambilDataGuru()
+   public function ambilDatamember()
    {
       // ambil variabel POST
       $tanggal = $this->request->getVar('tanggal');
 
       $lewat = Time::parse($tanggal)->isAfter(Time::today());
 
-      $result = $this->presensiGuru->getPresensiByTanggal($tanggal);
+      $result = $this->presensimember->getPresensiByTanggal($tanggal);
 
       $data = [
          'data' => $result,
@@ -51,18 +51,18 @@ class DataAbsenGuru extends BaseController
          'lewat' => $lewat
       ];
 
-      return view('admin/absen/list-absen-guru', $data);
+      return view('admin/absen/list-absen-member', $data);
    }
 
    public function ambilKehadiran()
    {
       $idPresensi = $this->request->getVar('id_presensi');
-      $idGuru = $this->request->getVar('id_guru');
+      $idmember = $this->request->getVar('id_member');
 
       $data = [
-         'presensi' => $this->presensiGuru->getPresensiById($idPresensi),
+         'presensi' => $this->presensimember->getPresensiById($idPresensi),
          'listKehadiran' => $this->kehadiranModel->getAllKehadiran(),
-         'data' => $this->guruModel->getGuruById($idGuru)
+         'data' => $this->memberModel->getmemberById($idmember)
       ];
 
       return view('admin/absen/ubah-kehadiran-modal', $data);
@@ -72,17 +72,17 @@ class DataAbsenGuru extends BaseController
    {
       // ambil variabel POST
       $idKehadiran = $this->request->getVar('id_kehadiran');
-      $idGuru = $this->request->getVar('id_guru');
+      $idmember = $this->request->getVar('id_member');
       $tanggal = $this->request->getVar('tanggal');
       $jamMasuk = $this->request->getVar('jam_masuk');
       $jamKeluar = $this->request->getVar('jam_keluar');
       $keterangan = $this->request->getVar('keterangan');
 
-      $cek = $this->presensiGuru->cekAbsen($idGuru, $tanggal);
+      $cek = $this->presensimember->cekAbsen($idmember, $tanggal);
 
-      $result = $this->presensiGuru->updatePresensi(
+      $result = $this->presensimember->updatePresensi(
          $cek == false ? NULL : $cek,
-         $idGuru,
+         $idmember,
          $tanggal,
          $idKehadiran,
          $jamMasuk ?? NULL,
@@ -90,7 +90,7 @@ class DataAbsenGuru extends BaseController
          $keterangan
       );
 
-      $response['nama_guru'] = $this->guruModel->getGuruById($idGuru)['nama_guru'];
+      $response['nama_member'] = $this->memberModel->getmemberById($idmember)['nama_member'];
 
       if ($result) {
          $response['status'] = TRUE;

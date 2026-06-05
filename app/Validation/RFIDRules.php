@@ -3,12 +3,12 @@
 namespace App\Validation;
 
 use App\Models\SiswaModel;
-use App\Models\GuruModel;
+use App\Models\memberModel;
 
 class RFIDRules
 {
     /**
-     * Checks if an RFID code is unique across tb_siswa and tb_guru.
+     * Checks if an RFID code is unique across tb_siswa and tb_member.
      * Use as: is_rfid_unique[exclude_id,type]
      * Example: is_rfid_unique[1,siswa] or is_rfid_unique[,siswa]
      */
@@ -23,7 +23,7 @@ class RFIDRules
         $type = $params[1] ?? null;
 
         $siswaModel = new SiswaModel();
-        $guruModel = new GuruModel();
+        $memberModel = new memberModel();
 
         // Check in tb_siswa
         $siswaQuery = $siswaModel->where('rfid_code', $str);
@@ -35,13 +35,13 @@ class RFIDRules
             return false;
         }
 
-        // Check in tb_guru
-        $guruQuery = $guruModel->where('rfid_code', $str);
-        if ($type === 'guru' && !empty($excludeId)) {
-            $guruQuery->where('id_guru !=', $excludeId);
+        // Check in tb_member
+        $memberQuery = $memberModel->where('rfid_code', $str);
+        if ($type === 'member' && !empty($excludeId)) {
+            $memberQuery->where('id_member !=', $excludeId);
         }
-        if ($guruQuery->countAllResults() > 0) {
-            $error = 'RFID code ini sudah digunakan oleh Guru.';
+        if ($memberQuery->countAllResults() > 0) {
+            $error = 'RFID code ini sudah digunakan oleh member.';
             return false;
         }
 

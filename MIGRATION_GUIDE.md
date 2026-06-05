@@ -1,6 +1,6 @@
 # Migration & Seeder Guide
 
-Panduan lengkap untuk mengelola database migrations dan seeders pada aplikasi Absensi Sekolah QR Code.
+Panduan lengkap untuk mengelola database migrations dan seeders pada aplikasi Absensi perusahaan QR Code.
 
 ## 📋 Daftar Isi
 
@@ -18,7 +18,7 @@ Migration adalah cara version control untuk database. File migration berada di `
 ### Daftar Migration Files
 
 1. **2023-08-18-000001_CreateJurusanTable.php**
-   - Membuat tabel `tb_jurusan` (jurusan sekolah)
+   - Membuat tabel `tb_jurusan` (jurusan perusahaan)
    - Kolom: id, jurusan, timestamps
 
 2. **2023-08-18-000002_CreateKelasTable.php**
@@ -29,9 +29,9 @@ Migration adalah cara version control untuk database. File migration berada di `
 3. **2023-08-18-000003_CreateDB.php**
    - Membuat 5 tabel utama:
      - `tb_kehadiran` - Master status kehadiran
-     - `tb_guru` - Data guru
+     - `tb_member` - Data member
      - `tb_siswa` - Data siswa
-     - `tb_presensi_guru` - Data presensi guru
+     - `tb_presensi_member` - Data presensi member
      - `tb_presensi_siswa` - Data presensi siswa
    - Menambahkan foreign keys antar tabel
 
@@ -42,14 +42,14 @@ Migration adalah cara version control untuk database. File migration berada di `
    - Membuat tabel `general_settings` untuk konfigurasi aplikasi
    - Kolom: id, logo, school_name, school_year, copyright
 
-6. **2025-12-23-000001_AddRfidToSiswaGuru.php**
-   - Menambah kolom `rfid_code` ke tabel `tb_siswa` dan `tb_guru`
+6. **2025-12-23-000001_AddRfidToSiswamember.php**
+   - Menambah kolom `rfid_code` ke tabel `tb_siswa` dan `tb_member`
    - Menambah index untuk performa pencarian
 
 7. **2025-12-23-000002_AddWaliKelasToKelas.php**
    - Menambah kolom `id_wali_kelas` ke tabel `tb_kelas`
-   - Menambah kolom `id_guru` ke tabel `users`
-   - Foreign keys: id_wali_kelas → tb_guru(id_guru), id_guru → tb_guru(id_guru)
+   - Menambah kolom `id_member` ke tabel `users`
+   - Foreign keys: id_wali_kelas → tb_member(id_member), id_member → tb_member(id_member)
 
 ## 🌱 Tentang Seeders
 
@@ -76,11 +76,11 @@ Seeder digunakan untuk mengisi data awal ke database. File seeder berada di `app
 
 6. **GeneralSettingsSeeder.php**
    - Mengisi pengaturan umum aplikasi
-   - School Name: SMK 1 Indonesia
+   - School Name: Raja Gym
    - School Year: 2024/2025
 
-7. **GuruSeeder.php** (Optional)
-   - Contoh seeder untuk data guru (sudah ada)
+7. **memberSeeder.php** (Optional)
+   - Contoh seeder untuk data member (sudah ada)
 
 8. **SiswaSeeder.php** (Optional)
    - Contoh seeder untuk data siswa (sudah ada)
@@ -94,14 +94,14 @@ Migration akan dijalankan berdasarkan urutan timestamp berikut:
 2. CreateKelasTable          (tb_kelas) → referensi tb_jurusan
 3. CreateDB                  (5 tabel + foreign keys)
    - tb_kehadiran
-   - tb_guru
+   - tb_member
    - tb_siswa            → referensi tb_kelas
-   - tb_presensi_guru    → referensi tb_guru, tb_kehadiran
+   - tb_presensi_member    → referensi tb_member, tb_kehadiran
    - tb_presensi_siswa   → referensi tb_siswa, tb_kelas, tb_kehadiran
 4. AddSuperadmin            (kolom is_superadmin ke users)
 5. GeneralSettings          (general_settings)
-6. AddRfidToSiswaGuru       (kolom rfid_code ke tb_siswa & tb_guru)
-7. AddWaliKelasToKelas      (kolom id_wali_kelas ke tb_kelas, id_guru ke users)
+6. AddRfidToSiswamember       (kolom rfid_code ke tb_siswa & tb_member)
+7. AddWaliKelasToKelas      (kolom id_wali_kelas ke tb_kelas, id_member ke users)
 ```
 
 ## 🚀 Cara Penggunaan

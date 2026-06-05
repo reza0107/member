@@ -13,8 +13,8 @@
                                 <div class="nav-tabs-navigation">
                                     <div class="row">
                                         <div class="col-md-4 col-lg-5">
-                                            <h4 class="card-title"><b>Import Jurusan</b></h4>
-                                            <p class="card-category">Import data jurusan dari CSV</p>
+                                            <h4 class="card-title"><b>Bulk Post Upload member</b></h4>
+                                            <p class="card-category">Import data member dari CSV</p>
                                         </div>
                                     </div>
                                 </div>
@@ -26,9 +26,9 @@
                                             <p class="dm-upload-icon">
                                                 <i class="material-icons">cloud_upload</i>
                                             </p>
-                                            <h3 class="text-muted">Tarik dan letakkan file di sini</h3>
+                                            <h3 class="text-muted">Drag &amp; drop files here</h3>
                                             <div class="btn btn-primary mb-5">
-                                                <span>Cari File</span>
+                                                <span>Open the file Browser</span>
                                                 <input type="file" title='Click to add Files' />
                                             </div>
                                         </div>
@@ -36,8 +36,8 @@
                                     <div class="col-sm-12">
                                         <div class="row">
                                             <div id="csv_upload_spinner" class="csv-upload-spinner">
-                                                <strong class="text-csv-importing">Importing Jurusan...</strong>
-                                                <strong class="text-csv-import-completed">Selesai!</strong>
+                                                <strong class="text-csv-importing">Importing member...</strong>
+                                                <strong class="text-csv-import-completed">completed!</strong>
                                                 <div class="spinner-bounce">
                                                     <div class="bounce1"></div>
                                                     <div class="bounce2"></div>
@@ -60,14 +60,14 @@
                     <div class="col-12 col-xl-4">
                         <div class="card">
                             <div class="card-header card-header-tabs card-header-primary">
-                                <h4 class="card-title"><b>Bantuan</b></h4>
-                                <p class="card-category">Download template CSV</p>
+                                <h4 class="card-title"><b>Help Documents</b></h4>
+                                <p class="card-category">documents to generate your CSV file</p>
                             </div>
                             <div class="card-body">
-                                <form action="<?= base_url('admin/jurusan/downloadCSVFilePost'); ?>" method="post">
+                                <form action="<?= base_url('admin/member/downloadCSVFilePost'); ?>" method="post">
                                     <?= csrf_field(); ?>
                                     <button class="btn btn-success btn-block" name="submit"
-                                        value="csv_jurusan_template">Download Template CSV</button>
+                                        value="csv_member_template">Download CSV Template</button>
                                 </form>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
 <script>
     $(function () {
         $('#drag-and-drop-zone').dmUploader({
-            url: '<?= base_url("admin/jurusan/generateCSVObjectPost"); ?>',
+            url: '<?= base_url("admin/member/generateCSVObjectPost"); ?>',
             multiple: false,
             extFilter: ["csv"],
             extraData: function (id) {
@@ -137,16 +137,12 @@
             };
             $.ajax({
                 type: "POST",
-                url: '<?= base_url("admin/jurusan/importCSVItemPost"); ?>',
+                url: '<?= base_url("admin/member/importCSVItemPost"); ?>',
                 data: setAjaxData(data),
                 success: function (response) {
                     var objSub = JSON.parse(response);
                     if (objSub.result == 1) {
-                        if (objSub.status == 'duplicate') {
-                            $("#csv_uploaded_files").prepend('<li class="list-group-item list-group-item-warning">&nbsp;' + objSub.index + '.&nbsp; - ' + objSub.jurusan.jurusan + ' (Sudah Ada)</li>');
-                        } else {
-                            $("#csv_uploaded_files").prepend('<li class="list-group-item list-group-item-success">&nbsp;' + objSub.index + '.&nbsp; - ' + objSub.jurusan.jurusan + '</li>');
-                        }
+                        $("#csv_uploaded_files").prepend('<li class="list-group-item list-group-item-success">&nbsp;' + objSub.index + '.&nbsp;' + objSub.member. + '.&nbsp; - ' + objSub.member.nama_member + '</li>');
                     } else {
                         $("#csv_uploaded_files").prepend('<li class="list-group-item list-group-item-danger">&nbsp;' + objSub.index + '.</li>');
                     }
