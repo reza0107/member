@@ -84,6 +84,19 @@
       margin-right: 5px;
       margin-bottom: 1rem !important;
    }
+
+   .member-wrapper {
+      padding: 25px;
+      max-width: 100%;
+   }
+
+   .member-wrapper table {
+      min-width: 1100px;
+   }
+
+   .table-responsive {
+      overflow-x: auto;
+   }
 </style>
 
 <div class="card-body">
@@ -98,16 +111,38 @@
          </p>
       </div>
       <?php if (!$empty) : ?>
+         <?php
+
+         $jmlHarian = 0;
+         $jml1Bulan = 0;
+         $jml3Bulan = 0;
+         $jml6Bulan = 0;
+         $jml12Bulan = 0;
+
+         foreach ($data as $m) {
+
+            if ($m['paket'] == '1 Hari') $jmlHarian++;
+
+            if ($m['paket'] == '1 Bulan') $jml1Bulan++;
+
+            if ($m['paket'] == '3 Bulan') $jml3Bulan++;
+
+            if ($m['paket'] == '6 Bulan') $jml6Bulan++;
+
+            if ($m['paket'] == '12 Bulan' || $m['paket'] == '1 Tahun') $jml12Bulan++;
+         }
+         ?>
+         <!-- BARIS 1 -->
          <div class="row mb-3">
 
-            <div class="col-md-4">
+            <div class="col-md-4 mb-2">
                <input type="text"
                   id="searchMember"
                   class="form-control"
-                  placeholder="Cari nama member...">
+                  placeholder="🔍 Cari Nama Member">
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3 mb-2">
                <select id="filterJK" class="form-control">
                   <option value="">Semua Jenis Kelamin</option>
                   <option value="Laki-laki">Laki-laki</option>
@@ -115,7 +150,7 @@
                </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-3 mb-2">
                <select id="filterStatus" class="form-control">
                   <option value="">Semua Status</option>
                   <option value="Aktif">Aktif</option>
@@ -123,12 +158,41 @@
                </select>
             </div>
 
-            <div class="col-md-2">
-               <button type="button"
+            <div class="col-md-2 mb-2">
+               <button
+                  type="button"
                   id="resetFilter"
-                  class="btn btn-secondary btn-block">
+                  class="btn btn-danger ">
                   Reset
                </button>
+            </div>
+
+         </div>
+
+         <!-- BARIS 2 -->
+         <div class="row mb-4">
+
+            <div class="col-md-3 mb-2">
+               <select id="filterPaket" class="form-control">
+                  <option value="">Semua Paket</option>
+                  <option value="1 Hari">1 Hari</option>
+                  <option value="1 Bulan">1 Bulan</option>
+                  <option value="3 Bulan">3 Bulan</option>
+                  <option value="6 Bulan">6 Bulan</option>
+                  <option value="12 Bulan">12 Bulan</option>
+               </select>
+            </div>
+
+            <div class="col-md-3 mb-2">
+               <input type="date"
+                  id="tanggalDari"
+                  class="form-control">
+            </div>
+
+            <div class="col-md-3 mb-2">
+               <input type="date"
+                  id="tanggalSampai"
+                  class="form-control">
             </div>
 
          </div>
@@ -139,6 +203,8 @@
                <th><b>Jenis Kelamin</b></th>
                <th><b>No HP</b></th>
                <th><b>Paket</b></th>
+               <th><b>Tanggal Daftar</b></th>
+               <th><b>Nominal</b></th>
                <th><b>Expired</b></th>
                <th><b>Status</b></th>
                <th width="1%"><b>Aksi</b></th>
@@ -152,6 +218,15 @@
                      <td><?= $value['jenis_kelamin']; ?></td>
                      <td><?= $value['no_hp']; ?></td>
                      <td><?= $value['paket']; ?></td>
+
+                     <td class="tanggal-daftar">
+                        <?= $value['tanggal_daftar']; ?>
+                     </td>
+
+                     <td>
+                        Rp <?= number_format($value['nominal'], 0, ',', '.'); ?>
+                     </td>
+
                      <td><?= $value['tanggal_expired']; ?></td>
 
                      <td>
@@ -197,6 +272,57 @@
                endforeach; ?>
             </tbody>
          </table>
+         <?php
+
+         $totalMember = count($data);
+
+         $totalNominal = 0;
+
+         foreach ($data as $m) {
+            $totalNominal += ($m['nominal'] ?? 0);
+         }
+
+         ?>
+
+         <div id="hasilFilter"
+            class="row mt-4"
+            style="display:none">
+
+            <div class="col-md-6">
+
+               <div class="card bg-success text-white">
+
+                  <div class="card-body text-center">
+
+                     <h6>Total Member</h6>
+
+                     <h2 id="totalMember">0</h2>
+
+                  </div>
+
+               </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+               <div class="card bg-info text-white">
+
+                  <div class="card-body text-center">
+
+                     <h6>Total Nominal</h6>
+
+                     <h2>
+                        Rp <span id="totalNominal">0</span>
+                     </h2>
+
+                  </div>
+
+               </div>
+
+            </div>
+
+         </div>
       <?php else : ?>
          <div class="row">
             <div class="col">
@@ -214,42 +340,149 @@
          let search = $('#searchMember').val().toLowerCase();
          let jk = $('#filterJK').val();
          let status = $('#filterStatus').val();
+         let paket = $('#filterPaket').val();
+
+         let dari = $('#tanggalDari').val();
+         let sampai = $('#tanggalSampai').val();
+
+         let totalMember = 0;
+         let totalNominal = 0;
 
          $('#memberTable tbody tr').each(function() {
 
             let nama = $(this).find('td:eq(1)').text().toLowerCase();
             let jenisKelamin = $(this).find('td:eq(2)').text().trim();
-            let statusMember = $(this).find('td:eq(6)').text().trim();
+            let paketMember = $(this).find('td:eq(4)').text().trim();
+
+            let tanggal = $(this).find('td:eq(5)').text().trim();
+
+            let statusMember = $(this)
+               .find('td:eq(8) .badge')
+               .text()
+               .trim();
+
+            let tanggalExpired = $(this).find('td:eq(7)').text().trim();
 
             let tampil = true;
 
-            // Cari Nama
+            // Nama
             if (search && !nama.includes(search)) {
                tampil = false;
             }
 
-            // Filter JK
-            if (jk && jenisKelamin !== jk) {
+            // Jenis Kelamin
+            if (jk !== '' && jenisKelamin !== jk) {
                tampil = false;
             }
 
-            // Filter Status
-            if (status && statusMember !== status) {
+            // Status
+            if (status !== '' && statusMember !== status) {
                tampil = false;
             }
+
+            // Paket
+            if (paket !== '' && paketMember !== paket) {
+               tampil = false;
+            }
+
+            // Tanggal
+            if (status === 'Expired') {
+
+               if (dari !== '' && tanggalExpired < dari) {
+                  tampil = false;
+               }
+
+               if (sampai !== '' && tanggalExpired > sampai) {
+                  tampil = false;
+               }
+
+            } else {
+
+               if (dari !== '' && tanggal < dari) {
+                  tampil = false;
+               }
+
+               if (sampai !== '' && tanggal > sampai) {
+                  tampil = false;
+               }
+
+            }
+
+            // Hitung total jika tampil
+            if (tampil) {
+
+               totalMember++;
+
+               let nominal = parseInt(
+                  $(this)
+                  .find('td:eq(6)')
+                  .text()
+                  .replace(/Rp/g, '')
+                  .replace(/\./g, '')
+                  .trim()
+               ) || 0;
+
+               totalNominal += nominal;
+            }
+            $('#totalMember').text(totalMember)
 
             $(this).toggle(tampil);
+
+            console.log(
+               $(this).find('td:eq(8)').text().trim()
+            );
+
          });
+
+         // Tampilkan total HANYA jika paket + tanggal dipilih
+         if (
+            paket !== '' &&
+            dari !== '' &&
+            sampai !== ''
+         ) {
+
+            $('#hasilFilter').show();
+
+            $('#totalMember').text(totalMember);
+
+            $('#totalNominal').text(
+               totalNominal.toLocaleString('id-ID')
+            );
+         } else {
+
+            $('#hasilFilter').hide();
+
+         }
       }
 
       $('#searchMember').on('keyup', filterTable);
+
       $('#filterJK').on('change', filterTable);
+
       $('#filterStatus').on('change', filterTable);
 
+      $('#filterPaket').on('change', filterTable);
+
+      $('#tanggalDari').on('change', filterTable);
+
+      $('#tanggalSampai').on('change', filterTable);
+
       $('#resetFilter').on('click', function() {
+
          $('#searchMember').val('');
+
          $('#filterJK').val('');
+
          $('#filterStatus').val('');
+
+         $('#filterPaket').val('');
+
+         $('#tanggalDari').val('');
+
+         $('#tanggalSampai').val('');
+
+         $('#hasilFilter').hide();
+
          filterTable();
       });
 

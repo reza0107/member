@@ -7,18 +7,19 @@ use CodeIgniter\Model;
 class memberModel extends Model
 {
    protected $allowedFields = [
-   'nama_member',
-   'jenis_kelamin',
-   'alamat',
-   'no_hp',
-   'paket',
-   'tanggal_daftar',
-   'tanggal_expired',
-   'status',
-   'qr_code',
-   'unique_code',
-   'rfid_code'
-];
+      'nama_member',
+      'jenis_kelamin',
+      'alamat',
+      'no_hp',
+      'paket',
+      'nominal',
+      'tanggal_daftar',
+      'tanggal_expired',
+      'status',
+      'qr_code',
+      'unique_code',
+      'rfid_code'
+   ];
 
    protected $table = 'tb_member';
 
@@ -42,53 +43,68 @@ class memberModel extends Model
    }
 
    public function createmember(
-    $nama,
-    $jenisKelamin,
-    $alamat,
-    $noHp,
-    $paket,
-    $rfid = null
-)
-{
-    $tanggalDaftar = date('Y-m-d');
+      $nama,
+      $jenisKelamin,
+      $alamat,
+      $noHp,
+      $paket,
+      $rfid = null
+   ) {
+      $tanggalDaftar = date('Y-m-d');
 
-    switch ($paket) {
-        case '1 Bulan':
+      switch ($paket) {
+
+         case '1 Hari':
+            $expired = date('Y-m-d', strtotime('+1 day'));
+            break;
+
+         case '1 Bulan':
             $expired = date('Y-m-d', strtotime('+1 month'));
             break;
 
-        case '3 Bulan':
-            $expired = date('Y-m-d', strtotime('+3 month'));
+         case '3 Bulan':
+            $expired = date('Y-m-d', strtotime('+3 months'));
             break;
 
-        case '6 Bulan':
-            $expired = date('Y-m-d', strtotime('+6 month'));
+         case '6 Bulan':
+            $expired = date('Y-m-d', strtotime('+6 months'));
             break;
 
-        case '1 Tahun':
-            $expired = date('Y-m-d', strtotime('+1 year'));
+         case '12 Bulan':
+            $expired = date('Y-m-d', strtotime('+12 months'));
             break;
 
-        default:
-            $expired = date('Y-m-d', strtotime('+1 month'));
-    }
+         default:
+            $expired = $tanggalDaftar;
+            break;
+      }
 
-    $uniqueCode = uniqid('MBR');
+      $nominal = match ($paket) {
+         '1 Hari' => 25000,
+         '1 Bulan' => 175000,
+         '3 Bulan' => 425000,
+         '6 Bulan' => 875000,
+         '12 Bulan' => 1775000,
+         default => 0
+      };
 
-    return $this->save([
-        'nama_member' => $nama,
-        'jenis_kelamin' => $jenisKelamin,
-        'alamat' => $alamat,
-        'no_hp' => $noHp,
-        'paket' => $paket,
-        'tanggal_daftar' => $tanggalDaftar,
-        'tanggal_expired' => $expired,
-        'status' => 'Aktif',
-        'unique_code' => $uniqueCode,
-        'qr_code' => $uniqueCode,
-        'rfid_code' => $rfid
-    ]);
-}
+      $uniqueCode = uniqid('MBR');
+
+      return $this->save([
+         'nama_member' => $nama,
+         'jenis_kelamin' => $jenisKelamin,
+         'alamat' => $alamat,
+         'no_hp' => $noHp,
+         'paket' => $paket,
+         'nominal' => $nominal,
+         'tanggal_daftar' => $tanggalDaftar,
+         'tanggal_expired' => $expired,
+         'status' => 'Aktif',
+         'unique_code' => $uniqueCode,
+         'qr_code' => $uniqueCode,
+         'rfid_code' => $rfid
+      ]);
+   }
 
    public function updatemember($id, $nama, $jenisKelamin, $alamat, $noHp, $rfid = null)
    {

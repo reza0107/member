@@ -95,16 +95,28 @@
                      </div>
 
                      <div class="form-group mt-4">
-    <label>Paket Membership</label>
+                        <label>Paket Membership</label>
 
-    <select name="paket" class="form-control" required>
-        <option value="">Pilih Paket</option>
-        <option value="1 Bulan">1 Bulan</option>
-        <option value="3 Bulan">3 Bulan</option>
-        <option value="6 Bulan">6 Bulan</option>
-        <option value="1 Tahun">1 Tahun</option>
-    </select>
-</div>       
+                        <select name="paket" class="form-control" required>
+                           <option value="">Pilih Paket</option>
+                           <option value="1 Hari">1 Hari</option>
+                           <option value="1 Bulan">1 Bulan</option>
+                           <option value="3 Bulan">3 Bulan</option>
+                           <option value="6 Bulan">6 Bulan</option>
+                           <option value="12 Bulan">12 Bulan</option>
+                        </select>
+                     </div>
+
+                     <div class="form-group mt-4">
+                        <label for="nominal">Nominal</label>
+
+                        <input type="text"
+                           id="nominal"
+                           name="nominal"
+                           class="form-control"
+                           readonly
+                           placeholder="Nominal otomatis">
+                     </div>
 
                      <div class="form-group mt-4">
                         <label for="rfid">RFID Code</label>
@@ -126,4 +138,48 @@
       </div>
    </div>
 </div>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+
+      const paket = document.querySelector('select[name="paket"]');
+      const nominal = document.getElementById('nominal');
+
+      paket.addEventListener('change', function() {
+
+         let harga = '';
+
+         switch (this.value) {
+
+            case '1 Hari':
+               nominal.value = 25000;
+               nominalText.innerHTML = 'Rp 25.000';
+               break;
+
+            case '1 Bulan':
+               nominal.value = 175000;
+               nominalText.innerHTML = 'Rp 175.000';
+               break;
+
+            case '3 Bulan':
+               nominal.value = 425000;
+               nominalText.innerHTML = 'Rp 425.000';
+               break;
+
+            case '6 Bulan':
+               nominal.value = 875000;
+               nominalText.innerHTML = 'Rp 875.000';
+               break;
+
+            case '12 Bulan':
+               nominal.value = 1775000;
+               nominalText.innerHTML = 'Rp 1.775.000';
+               break;
+         }
+
+         nominal.value = harga;
+
+      });
+
+   });
+</script>
 <?= $this->endSection() ?>
