@@ -218,6 +218,41 @@ class Datamember extends BaseController
          return view('/admin/data/edit/edit-data-member', $data);
       }
 
+      $paket = $this->request->getVar('paket');
+
+      switch ($paket) {
+         case '1 Hari':
+            $nominal = 25000;
+            $tanggalExpired = date('Y-m-d', strtotime('+1 day'));
+            break;
+
+         case '1 Bulan':
+            $nominal = 175000;
+            $tanggalExpired = date('Y-m-d', strtotime('+1 month'));
+            break;
+
+         case '3 Bulan':
+            $nominal = 425000;
+            $tanggalExpired = date('Y-m-d', strtotime('+3 months'));
+            break;
+
+         case '6 Bulan':
+            $nominal = 875000;
+            $tanggalExpired = date('Y-m-d', strtotime('+6 months'));
+            break;
+
+         case '12 Bulan':
+            $nominal = 1775000;
+            $tanggalExpired = date('Y-m-d', strtotime('+12 months'));
+            break;
+
+         default:
+            $nominal = 0;
+            $tanggalExpired = null;
+      }
+
+      $tanggalDaftar = date('Y-m-d');
+
       // update
       $result = $this->memberModel->updatemember(
          id: $idmember,
@@ -225,7 +260,11 @@ class Datamember extends BaseController
          jenisKelamin: $this->request->getVar('jk'),
          alamat: $this->request->getVar('alamat'),
          noHp: $this->request->getVar('no_hp'),
-         rfid: $this->request->getVar('rfid')
+         rfid: $this->request->getVar('rfid'),
+         paket: $paket,
+         nominal: $nominal,
+         tanggalDaftar: $tanggalDaftar,
+         tanggalExpired: $tanggalExpired
       );
 
       if ($result) {

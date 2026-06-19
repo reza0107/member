@@ -57,83 +57,86 @@ class GenerateLaporan extends BaseController
       return view('admin/generate-laporan/generate-laporan', $data);
    }
 
-   public function generateLaporanSiswa()
+   public function generateLaporanPendapatan()
    {
-      $idKelas = $this->request->getVar('kelas');
-      $siswa = $this->siswaModel->getSiswaByKelas($idKelas);
+      $awal = $this->request->getVar('tanggal_awal');
+      $akhir = $this->request->getVar('tanggal_akhir');
       $type = $this->request->getVar('type');
+      $paketFilter = $this->request->getVar('paket');
 
-      if (empty($siswa)) {
-         session()->setFlashdata([
-            'msg' => 'Data siswa kosong!',
-            'error' => true
-         ]);
-         return redirect()->to('/admin/laporan');
+      $rekap = [
+         '1 Hari' => ['jumlah' => 0, 'nominal' => 0],
+         '1 Bulan' => ['jumlah' => 0, 'nominal' => 0],
+         '3 Bulan' => ['jumlah' => 0, 'nominal' => 0],
+         '6 Bulan' => ['jumlah' => 0, 'nominal' => 0],
+         '12 Bulan' => ['jumlah' => 0, 'nominal' => 0],
+      ];
+
+      $query = $this->presensimemberModel
+         ->select('tb_presensi_member.*, tb_member.nama_member, tb_member.paket, tb_member.nominal, tb_member.tanggal_daftar, tb_member.tanggal_expired')
+         ->join('tb_member', 'tb_member.id_member = tb_presensi_member.id_member')
+         ->where('tanggal >=', $awal)
+         ->where('tanggal <=', $akhir);
+
+      if ($paketFilter != 'all') {
+         $query->where('tb_member.paket', $paketFilter);
       }
 
-      $kelas = (array) $this->kelasModel->getKelas($idKelas);
+      $presensi = $query
+         ->groupBy('tb_presensi_member.id_member')
+         ->findAll();
 
-      $bulan = $this->request->getVar('tanggalSiswa');
+      $totalMember = 0;
+      $totalPendapatan = 0;
 
-      // hari pertama dalam 1 bulan
-      $begin = new Time($bulan, locale: 'id');
-      // tanggal terakhir dalam 1 bulan
-      $end = (new DateTime($begin->format('Y-m-t')))->modify('+1 day');
-      // interval 1 hari
-      $interval = DateInterval::createFromDateString('1 day');
-      // buat array dari semua hari di bulan
-      $period = new DatePeriod($begin, $interval, $end);
+      foreach ($presensi as $p) {
 
-      $arrayTanggal = [];
-      $dataAbsen = [];
+         $paket = $p['paket'];
 
-      foreach ($period as $value) {
-         // kecualikan hari sabtu dan minggu
-         if (!($value->format('D') == 'Sat' || $value->format('D') == 'Sun')) {
-            $lewat = Time::parse($value->format('Y-m-d'))->isAfter(Time::today());
-
-            $absenByTanggal = $this->presensiSiswaModel
-               ->getPresensiByKelasTanggal($idKelas, $value->format('Y-m-d'));
-
-            $absenByTanggal['lewat'] = $lewat;
-
-            array_push($dataAbsen, $absenByTanggal);
-            array_push($arrayTanggal, Time::createFromInstance($value, locale: 'id'));
+         if (!isset($rekap[$paket])) {
+            continue;
          }
-      }
 
-      $laki = 0;
+         $rekap[$paket]['jumlah']++;
+         $rekap[$paket]['nominal'] += $p['nominal'];
 
-      foreach ($siswa as $value) {
-         if ($value['jenis_kelamin'] != 'Perempuan') {
-            $laki++;
-         }
+         $totalMember++;
+         $totalPendapatan += $p['nominal'];
       }
 
       $data = [
-         'tanggal' => $arrayTanggal,
-         'bulan' => $begin->toLocalizedString('MMMM'),
-         'listAbsen' => $dataAbsen,
-         'listSiswa' => $siswa,
-         'rekapSiswa' => [
-            'laki' => $laki,
-            'perempuan' => count($siswa) - $laki
-         ],
-         'kelas' => $kelas,
-         'grup' => "kelas " . $kelas['kelas'],
+         'detailMember' => $presensi,
+         'awal' => $awal,
+         'akhir' => $akhir,
+         'rekap' => $rekap,
+         'totalMember' => $totalMember,
+         'totalPendapatan' => $totalPendapatan,
+         'paketFilter' => $paketFilter,
+         'grup' => 'member'
       ];
 
       if ($type == 'doc') {
-         $this->response->setHeader('Content-type', 'application/vnd.ms-word');
+
          $this->response->setHeader(
-            'Content-Disposition',
-            'attachment;Filename=laporan_absen_' . $kelas['kelas'] . '_' . $begin->toLocalizedString('MMMM-Y') . '.doc'
+            'Content-type',
+            'application/vnd.ms-word'
          );
 
-         return view('admin/generate-laporan/laporan-siswa', $data);
+         $this->response->setHeader(
+            'Content-Disposition',
+            'attachment;Filename=laporan_pendapatan_member.doc'
+         );
+
+         return view(
+            'admin/generate-laporan/laporan-pendapatan-member',
+            $data
+         );
       }
 
-      return view('admin/generate-laporan/laporan-siswa', $data) . view('admin/generate-laporan/topdf');
+      return view(
+         'admin/generate-laporan/laporan-pendapatan-member',
+         $data
+      ) . view('admin/generate-laporan/topdf');
    }
 
    public function generateLaporanmember()

@@ -98,33 +98,47 @@
                         </div>
                      </div>
 
+                     <?php
+                     $paket = old('paket') ?? ($data['paket'] ?? '');
+                     ?>
+
                      <div class="form-group mt-4">
-   <label>Paket Membership</label>
+                        <label>Paket Membership</label>
 
-   <select name="paket" class="form-control" required>
+                        <select name="paket" id="paket" class="form-control" required>
+                           <option value="">Pilih Paket</option>
 
-      <option value="1 Bulan"
-         <?= ($data['paket'] == '1 Bulan') ? 'selected' : '' ?>>
-         1 Bulan
-      </option>
+                           <option value="1 Hari" <?= $paket == '1 Hari' ? 'selected' : '' ?>>
+                              1 Hari
+                           </option>
 
-      <option value="3 Bulan"
-         <?= ($data['paket'] == '3 Bulan') ? 'selected' : '' ?>>
-         3 Bulan
-      </option>
+                           <option value="1 Bulan" <?= $paket == '1 Bulan' ? 'selected' : '' ?>>
+                              1 Bulan
+                           </option>
 
-      <option value="6 Bulan"
-         <?= ($data['paket'] == '6 Bulan') ? 'selected' : '' ?>>
-         6 Bulan
-      </option>
+                           <option value="3 Bulan" <?= $paket == '3 Bulan' ? 'selected' : '' ?>>
+                              3 Bulan
+                           </option>
 
-      <option value="1 Tahun"
-         <?= ($data['paket'] == '1 Tahun') ? 'selected' : '' ?>>
-         1 Tahun
-      </option>
+                           <option value="6 Bulan" <?= $paket == '6 Bulan' ? 'selected' : '' ?>>
+                              6 Bulan
+                           </option>
 
-   </select>
-</div>
+                           <option value="12 Bulan" <?= $paket == '12 Bulan' ? 'selected' : '' ?>>
+                              12 Bulan
+                           </option>
+                        </select>
+                     </div>
+
+                     <div class="form-group mt-4">
+                        <label>Nominal</label>
+                        <input type="number"
+                           name="nominal"
+                           id="nominal"
+                           class="form-control"
+                           value="<?= old('nominal') ?? ($data['nominal'] ?? '') ?>"
+                           readonly>
+                     </div>
 
                      <div class="form-group mt-4">
                         <label for="rfid">RFID Code</label>
@@ -147,4 +161,44 @@
       </div>
    </div>
 </div>
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+
+      const paket = document.getElementById('paket');
+      const nominal = document.getElementById('nominal');
+
+      function updateNominal() {
+
+         switch (paket.value) {
+
+            case '1 Hari':
+               nominal.value = 25000;
+               break;
+
+            case '1 Bulan':
+               nominal.value = 175000;
+               break;
+
+            case '3 Bulan':
+               nominal.value = 425000;
+               break;
+
+            case '6 Bulan':
+               nominal.value = 875000;
+               break;
+
+            case '12 Bulan':
+               nominal.value = 1775000;
+               break;
+
+            default:
+               nominal.value = '';
+         }
+      }
+
+      paket.addEventListener('change', updateNominal);
+
+      updateNominal();
+   });
+</script>
 <?= $this->endSection() ?>

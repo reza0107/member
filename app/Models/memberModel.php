@@ -106,15 +106,28 @@ class memberModel extends Model
       ]);
    }
 
-   public function updatemember($id, $nama, $jenisKelamin, $alamat, $noHp, $rfid = null)
-   {
-      return $this->save([
-         $this->primaryKey => $id,
-         'nama_member' => $nama,
-         'jenis_kelamin' => $jenisKelamin,
-         'alamat' => $alamat,
-         'no_hp' => $noHp,
-         'rfid_code' => $rfid,
+   public function updatemember(
+      $id,
+      $nama,
+      $jenisKelamin,
+      $alamat,
+      $noHp,
+      $rfid,
+      $paket,
+      $nominal,
+      $tanggalDaftar,
+      $tanggalExpired
+   ) {
+      return $this->update($id, [
+         'nama_member'      => $nama,
+         'jenis_kelamin'    => $jenisKelamin,
+         'alamat'           => $alamat,
+         'tanggal_daftar'   => $tanggalDaftar,
+         'tanggal_expired'  => $tanggalExpired,
+         'no_hp'            => $noHp,
+         'rfid_code'        => $rfid,
+         'paket'            => $paket,
+         'nominal'          => $nominal
       ]);
    }
 

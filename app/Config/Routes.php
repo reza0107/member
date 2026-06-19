@@ -173,6 +173,7 @@ $routes->group('admin', function (RouteCollection $routes) {
    $routes->get('laporan', 'Admin\GenerateLaporan::index');
    $routes->post('laporan/siswa', 'Admin\GenerateLaporan::generateLaporanSiswa');
    $routes->post('laporan/member', 'Admin\GenerateLaporan::generateLaporanmember');
+   $routes->post('laporan/pendapatan', 'Admin\GenerateLaporan::generateLaporanPendapatan');
 
    // superadmin data petugas
    $routes->group('petugas', ['namespace' => 'App\Controllers\Admin'], function ($routes) {

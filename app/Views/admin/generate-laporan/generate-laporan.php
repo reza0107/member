@@ -27,120 +27,164 @@
                </div>
                <div class="card-body">
                   <div class="row">
-                     <div class="col-md-6">
-                        <div class="card h-100">
-                           <form action="<?= base_url('admin/laporan/siswa'); ?>" method="post"
-                              class="card-body d-flex flex-column">
-                              <h4 class="text-primary"><b>Laporan Absen Siswa</b></h4>
-                              <div class="row align-items-center">
-                                 <div class="col-auto">
-                                    <p class="d-inline"><b>Bulan :</b></p>
-                                 </div>
-                                 <div class="col-5">
-                                    <input type="month" name="tanggalSiswa" id="tanggalSiswa" class="form-control"
-                                       value="<?= date('Y-m'); ?>">
-                                 </div>
-                              </div>
-                              <select name="kelas" class="custom-select mt-3">
-                                 <option value="">--Pilih kelas--</option>
-                                 <?php foreach ($kelas as $key => $value): ?>
-                                    <?php
-                                    $idKelas = $value['id_kelas'];
-                                    $namaKelas = $value['kelas'];
-                                    $totalSiswa = count($siswaPerKelas[$key]);
-                                    ?>
-                                    <option value="<?= $idKelas; ?>">
-                                       <?= "$namaKelas - {$totalSiswa} siswa"; ?>
-                                    </option>
-                                 <?php endforeach; ?>
-                              </select>
-                              <div class="errMsg"></div>
-                              <div class="mt-auto d-flex flex-column">
-                                 <button type="submit" name="type" value="pdf" class="btn btn-danger pl-3">
-                                    <div class="row align-items-center">
-                                       <div class="col-auto">
-                                          <i class="material-icons" style="font-size: 32px;">print</i>
-                                       </div>
-                                       <div class="col">
-                                          <div class="text-start">
-                                             <h4 class="d-inline"><b>Generate pdf</b></h4>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </button>
-                                 <button type="submit" name="type" value="doc" class="btn btn-info pl-3">
-                                    <div class="row align-items-center">
-                                       <div class="col-auto">
-                                          <i class="material-icons" style="font-size: 32px;">description</i>
-                                       </div>
-                                       <div class="col">
-                                          <div class="text-start">
-                                             <h4 class="d-inline"><b>Generate doc</b></h4>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </button>
-                                 <!-- <button type="submit" name="type" value="xls" class="btn btn-success pl-3 mt-auto">
-                                 <div class="row align-items-center">
-                                    <div class="col-auto">
-                                       <i class="material-icons" style="font-size: 32px;">table_view</i>
-                                    </div>
-                                    <div class="col">
-                                       <div class="text-start">
-                                          <h4 class="d-inline"><b>Generate xls</b></h4>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </button> -->
-                              </div>
 
-                           </form>
-                        </div>
-                     </div>
+                     <!-- CARD PENDAPATAN -->
                      <div class="col-md-6">
-                        <div class="card h-100">
-                           <form action="<?= base_url('admin/laporan/member'); ?>" method="post"
-                              class="card-body d-flex flex-column">
-                              <h4 class="text-success"><b>Laporan Absen member</b></h4>
-                              <p>Total jumlah member : <b><?= count($member); ?></b></p>
-                              <div class="row align-items-center">
-                                 <div class="col-auto">
-                                    <p class="d-inline"><b>Bulan :</b></p>
+                        <div class="card border-success h-100">
+
+                           <div class="card-header bg-success text-white">
+                              <h4 class="mb-0">
+                                 💰 Laporan Pendapatan Membership
+                              </h4>
+                           </div>
+
+                           <div class="card-body">
+
+                              <form action="<?= base_url('admin/laporan/pendapatan'); ?>" method="post">
+
+                                 <div class="form-group">
+                                    <label>Dari Tanggal</label>
+                                    <input type="date"
+                                       name="tanggal_awal"
+                                       class="form-control"
+                                       required>
                                  </div>
-                                 <div class="col-5">
-                                    <input type="month" name="tanggalmember" id="tanggalmember" class="form-control"
-                                       value="<?= date('Y-m'); ?>">
+
+                                 <div class="form-group">
+                                    <label>Sampai Tanggal</label>
+                                    <input type="date"
+                                       name="tanggal_akhir"
+                                       class="form-control"
+                                       required>
                                  </div>
-                              </div>
-                              <div class="mt-auto d-flex flex-column">
-                                 <button type="submit" name="type" value="pdf" class="btn btn-danger pl-3">
-                                    <div class="row align-items-center">
-                                       <div class="col-auto">
-                                          <i class="material-icons" style="font-size: 32px;">print</i>
-                                       </div>
-                                       <div class="col">
-                                          <div class="text-start">
-                                             <h4 class="d-inline"><b>Generate pdf</b></h4>
-                                          </div>
-                                       </div>
+
+                                 <div class="form-group">
+                                    <label>Paket Membership</label>
+
+                                    <select name="paket" class="form-control">
+                                       <option value="all">Semua Paket</option>
+                                       <option value="1 Hari">1 Hari</option>
+                                       <option value="1 Bulan">1 Bulan</option>
+                                       <option value="3 Bulan">3 Bulan</option>
+                                       <option value="6 Bulan">6 Bulan</option>
+                                       <option value="12 Bulan">12 Bulan</option>
+                                    </select>
+                                 </div>
+
+                                 <div class="row mt-4">
+
+                                    <div class="col-6">
+                                       <button
+                                          type="submit"
+                                          name="type"
+                                          value="pdf"
+                                          class="btn btn-danger btn-block">
+
+                                          <i class="material-icons">picture_as_pdf</i>
+                                          PDF
+                                       </button>
                                     </div>
-                                 </button>
-                                 <button type="submit" name="type" value="doc" class="btn btn-info pl-3">
-                                    <div class="row align-items-center">
-                                       <div class="col-auto">
-                                          <i class="material-icons" style="font-size: 32px;">description</i>
-                                       </div>
-                                       <div class="col">
-                                          <div class="text-start">
-                                             <h4 class="d-inline"><b>Generate doc</b></h4>
-                                          </div>
-                                       </div>
+
+                                    <div class="col-6">
+                                       <button
+                                          type="submit"
+                                          name="type"
+                                          value="doc"
+                                          class="btn btn-info btn-block">
+
+                                          <i class="material-icons">description</i>
+                                          DOC
+                                       </button>
                                     </div>
-                                 </button>
-                              </div>
-                           </form>
+
+                                 </div>
+
+                              </form>
+
+                           </div>
+
                         </div>
                      </div>
+
+                     <!-- CARD ABSENSI -->
+                     <div class="col-md-6">
+                        <div class="card border-info h-100">
+
+                           <div class="card-header bg-info text-white">
+                              <h4 class="mb-0">
+                                 📋 Laporan Absensi Member
+                              </h4>
+                           </div>
+
+                           <div class="card-body">
+
+                              <form action="<?= base_url('admin/laporan/member'); ?>" method="post">
+
+                                 <div class="form-group">
+
+                                    <label>Total Member</label>
+
+                                    <input
+                                       type="text"
+                                       class="form-control"
+                                       value="<?= count($member); ?> Member"
+                                       readonly>
+
+                                 </div>
+
+                                 <div class="form-group">
+
+                                    <label>Bulan</label>
+
+                                    <input
+                                       type="month"
+                                       name="tanggalmember"
+                                       class="form-control"
+                                       value="<?= date('Y-m'); ?>">
+
+                                 </div>
+
+                                 <div class="row mt-4">
+
+                                    <div class="col-6">
+
+                                       <button
+                                          type="submit"
+                                          name="type"
+                                          value="pdf"
+                                          class="btn btn-danger btn-block">
+
+                                          <i class="material-icons">picture_as_pdf</i>
+                                          PDF
+
+                                       </button>
+
+                                    </div>
+
+                                    <div class="col-6">
+
+                                       <button
+                                          type="submit"
+                                          name="type"
+                                          value="doc"
+                                          class="btn btn-info btn-block">
+
+                                          <i class="material-icons">description</i>
+                                          DOC
+
+                                       </button>
+
+                                    </div>
+
+                                 </div>
+
+                              </form>
+
+                           </div>
+
+                        </div>
+                     </div>
+
                   </div>
                   <br><br>
                </div>
