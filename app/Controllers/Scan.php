@@ -233,6 +233,114 @@ class Scan extends BaseController
       return view('scan/scan-result', $data);
    }
 
+   public function memberHarian()
+   {
+
+      $tanggal = date('Y-m-d');
+
+      $dataHarian = $this->memberModel
+         ->where('paket', '1 Hari')
+         ->where('tanggal_daftar', $tanggal)
+         ->findAll();
+
+      $nomorTerpakai = [];
+
+      foreach ($dataHarian as $row) {
+
+         if (
+            preg_match(
+               '/Harian\s+(\d+)/',
+               $row['nama_member'],
+               $match
+            )
+         ) {
+            $nomorTerpakai[] = (int) $match[1];
+         }
+      }
+
+      sort($nomorTerpakai);
+
+      $urutan = 1;
+
+      while (in_array($urutan, $nomorTerpakai)) {
+         $urutan++;
+      }
+
+      do {
+
+         $uniqueCode =
+            'HRN-' .
+            date('Ymd') .
+            '-' .
+            str_pad($urutan, 4, '0', STR_PAD_LEFT);
+
+         $cekUnique = $this->memberModel
+            ->where('unique_code', $uniqueCode)
+            ->first();
+
+         if ($cekUnique) {
+            $urutan++;
+         }
+      } while ($cekUnique);
+
+      $namaMember = 'Harian ' . $urutan . ' ' . date('d-m-Y');
+      $metodeBayar = $this->request->getPost('metode_bayar');
+
+      $bayarCash = $this->request->getPost('bayar_cash') ?? 0;
+
+      $bayarQris = $this->request->getPost('bayar_qris') ?? 0;
+
+      if ($metodeBayar == 'Cash') {
+
+         $bayarCash = 25000;
+         $bayarQris = 0;
+      } elseif ($metodeBayar == 'QRIS') {
+
+         $bayarCash = 0;
+         $bayarQris = 25000;
+      }
+
+      $this->memberModel->insert([
+
+         'nama_member'      => $namaMember,
+         'jenis_kelamin'    => 'Laki-laki',
+         'alamat'           => '-',
+         'no_hp'            => '-',
+
+         'paket'            => '1 Hari',
+         'nominal'          => 25000,
+
+         'metode_bayar'     => $metodeBayar,
+         'bayar_cash'       => $bayarCash,
+         'bayar_qris'       => $bayarQris,
+
+         'tanggal_daftar'   => $tanggal,
+         'tanggal_expired'  => $tanggal,
+
+         'status'           => 'Aktif',
+
+         'unique_code'      => $uniqueCode,
+         'qr_code'          => $uniqueCode,
+         'rfid_code'        => null
+
+      ]);
+
+      $idMember = $this->memberModel->insertID();
+
+      $this->presensimemberModel->absenMasuk(
+         $idMember,
+         $tanggal,
+         date('H:i:s')
+      );
+
+      session()->setFlashdata([
+         'msg' => $namaMember . ' berhasil ditambahkan',
+         'error' => false
+      ]);
+
+      return redirect()->to('/scan');
+   }
+
    public function showErrorView(string $msg = 'no error message', $data = NULL)
    {
       $errdata = $data ?? [];

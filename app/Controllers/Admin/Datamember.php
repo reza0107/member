@@ -147,6 +147,7 @@ class Datamember extends BaseController
 
    public function savemember()
    {
+
       // validasi
       if (!$this->validate($this->memberValidationRules)) {
          $data = [
@@ -165,7 +166,10 @@ class Datamember extends BaseController
          alamat: $this->request->getVar('alamat'),
          noHp: $this->request->getVar('no_hp'),
          paket: $this->request->getVar('paket'),
-         rfid: $this->request->getVar('rfid')
+         rfid: $this->request->getVar('rfid'),
+         metodeBayar: $this->request->getVar('metode_bayar'),
+         bayarCash: $this->request->getVar('bayar_cash') ?? 0,
+         bayarQris: $this->request->getVar('bayar_qris') ?? 0
       );
 
       if ($result) {
@@ -264,7 +268,11 @@ class Datamember extends BaseController
          paket: $paket,
          nominal: $nominal,
          tanggalDaftar: $tanggalDaftar,
-         tanggalExpired: $tanggalExpired
+         tanggalExpired: $tanggalExpired,
+
+         metodeBayar: $this->request->getVar('metode_bayar'),
+         bayarCash: $this->request->getVar('bayar_cash') ?? 0,
+         bayarQris: $this->request->getVar('bayar_qris') ?? 0
       );
 
       if ($result) {

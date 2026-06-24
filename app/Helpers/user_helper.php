@@ -2,11 +2,31 @@
 
 use App\Libraries\enums\UserRole;
 
-function user_role(): UserRole
+function auth_user()
 {
-    $u = user();
+    $auth = service('authentication');
 
-    return UserRole::from(intval($u->is_superadmin));
+    if (!$auth->check()) {
+        return null;
+    }
+
+    return $auth->user();
+}
+
+function user_role()
+{
+    $user = auth_user();
+
+    if (!$user) {
+        return null;
+    }
+
+    // Superadmin
+    if (!empty($user->is_superadmin)) {
+        return \App\Libraries\enums\UserRole::SuperAdmin;
+    }
+
+    return null;
 }
 
 function getUserRole(int|string $role): string
@@ -16,11 +36,23 @@ function getUserRole(int|string $role): string
 
 function is_wali_kelas(): bool
 {
-    return !empty(user()->id_member);
+    $user = auth_user();
+
+    if (!$user) {
+        return false;
+    }
+
+    return !empty($user->id_member);
 }
 
 function is_superadmin(): bool
 {
+    $user = auth_user();
+
+    if (!$user) {
+        return false;
+    }
+
     return user_role()->isSuperAdmin();
 }
 
@@ -43,4 +75,3 @@ function can_view_report(): bool
 {
     return in_array(user_role(), [UserRole::SuperAdmin, UserRole::StafPetugas, UserRole::Kepsek]);
 }
-

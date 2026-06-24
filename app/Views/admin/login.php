@@ -67,7 +67,25 @@
 
                         <br>
 
-                        <button type="submit" class="btn btn-primary btn-block"><?= lang('Auth.loginAction') ?></button>
+                        <button type="submit" class="btn btn-primary btn-block py-2">
+                           <i class="material-icons mr-1">login</i>
+                           <?= lang('Auth.loginAction') ?>
+                        </button>
+
+                        <div class="text-center my-3">
+                           <span class="text-muted">
+                              ───── atau ─────
+                           </span>
+                        </div>
+
+                        <a href="<?= site_url('scan/masuk'); ?>"
+                           class="btn btn-success btn-block py-2">
+
+                           <i class="material-icons mr-1">qr_code_scanner</i>
+
+                           Absen Masuk
+
+                        </a>
 
                         <?php if ($config->activeResetter): ?>
                            <p><a href="<?= url_to('forgot') ?>"><?= lang('Auth.forgotYourPassword') ?></a></p>

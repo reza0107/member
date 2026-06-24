@@ -32,34 +32,53 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
+$routes->get('debug-auth', function () {
 
-// Scan
-$routes->get('/', function () {
-   helper('user');
-   if (is_wali_kelas()) {
-      return redirect()->to(base_url('teacher/dashboard'));
+   $auth = service('authentication');
+
+   echo '<pre>';
+
+   echo 'Check Login: ';
+   var_dump($auth->check());
+
+   echo '<br><br>';
+
+   if ($auth->check()) {
+      print_r($auth->user());
    }
-
-   $role = user_role();
-   if ($role === UserRole::Scanner || $role === UserRole::StafPetugas) {
-      return redirect()->to(base_url('scan'));
-   }
-
-   return redirect()->to(base_url('admin'));
 });
 
+$routes->get('cek-role', function () {
+
+   helper('user');
+
+   echo '<pre>';
+
+   $user = auth_user();
+
+   var_dump($user->is_superadmin);
+
+   die();
+});
+
+$routes->get('/', function () {
+   return redirect()->to('/login');
+});
+
+
+// Scan
 $routes->group('scan', function (RouteCollection $routes) {
+   $routes->post('member-harian', 'Scan::memberHarian');
    $routes->get('', 'Scan::index');
    $routes->get('masuk', 'Scan::index/Masuk');
    $routes->get('pulang', 'Scan::index/Pulang');
-
    $routes->post('cek', 'Scan::cekKode');
 });
 
 
 
 // Admin
-$routes->group('admin', function (RouteCollection $routes) {
+$routes->group('admin', ['filter' => 'login'], function (RouteCollection $routes) {
    // Admin dashboard
    $routes->get('', 'Admin\Dashboard::index');
    $routes->get('dashboard', 'Admin\Dashboard::index');
@@ -168,6 +187,32 @@ $routes->group('admin', function (RouteCollection $routes) {
    $routes->get('qr/siswa/(:any)/download', 'Admin\QRGenerator::downloadQrSiswa/$1');
    $routes->get('qr/member/download', 'Admin\QRGenerator::downloadAllQrmember');
    $routes->get('qr/member/(:any)/download', 'Admin\QRGenerator::downloadQrmember/$1');
+
+   // admin penjualan barang
+   $routes->get(
+      'penjualan-barang',
+      'Admin\PenjualanBarang::index'
+   );
+
+   $routes->post(
+      'penjualan-barang/create',
+      'Admin\PenjualanBarang::create'
+   );
+
+   $routes->get(
+      'penjualan-barang/edit/(:num)',
+      'Admin\PenjualanBarang::edit/$1'
+   );
+
+   $routes->post(
+      'penjualan-barang/update',
+      'Admin\PenjualanBarang::update'
+   );
+
+   $routes->delete(
+      'penjualan-barang/delete/(:num)',
+      'Admin\PenjualanBarang::delete/$1'
+   );
 
    // admin buat laporan
    $routes->get('laporan', 'Admin\GenerateLaporan::index');

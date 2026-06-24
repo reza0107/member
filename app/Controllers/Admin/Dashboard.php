@@ -44,7 +44,9 @@ class Dashboard extends BaseController
          return redirect()->to('teacher/dashboard');
       }
 
-      if (user_role() === UserRole::Scanner) {
+      $role = user_role();
+
+      if ($role !== null && $role === UserRole::Scanner) {
          return redirect()->to('scan');
       }
 

@@ -140,6 +140,68 @@
                            readonly>
                      </div>
 
+                     <div class="form-group">
+
+                        <label>Metode Pembayaran</label>
+
+                        <?php
+                        $metode = $data['metode_bayar'] ?? '';
+                        ?>
+
+                        <div class="custom-control custom-checkbox">
+                           <input type="checkbox"
+                              class="custom-control-input"
+                              id="cash">
+                           <label class="custom-control-label" for="cash">
+                              Cash
+                           </label>
+                        </div>
+
+                        <div class="custom-control custom-checkbox">
+                           <input type="checkbox"
+                              class="custom-control-input"
+                              id="qris">
+                           <label class="custom-control-label" for="qris">
+                              QRIS
+                           </label>
+                        </div>
+
+                        <input
+                           type="hidden"
+                           name="metode_bayar"
+                           id="metode_bayar"
+                           value="<?= $metode ?>">
+
+                     </div>
+
+                     <div id="gabunganArea" style="display:none">
+
+                        <div class="form-group">
+
+                           <label>Bayar Cash</label>
+
+                           <input
+                              type="number"
+                              class="form-control"
+                              name="bayar_cash"
+                              value="0">
+
+                        </div>
+
+                        <div class="form-group">
+
+                           <label>Bayar QRIS</label>
+
+                           <input
+                              type="number"
+                              class="form-control"
+                              name="bayar_qris"
+                              value="0">
+
+                        </div>
+
+                     </div>
+
                      <div class="form-group mt-4">
                         <label for="rfid">RFID Code</label>
                         <input type="text" id="rfid" name="rfid"
@@ -200,5 +262,64 @@
 
       updateNominal();
    });
+
+   const cash = document.getElementById('cash');
+   const qris = document.getElementById('qris');
+
+   const metodeBayar =
+      document.getElementById('metode_bayar');
+
+   const gabunganArea =
+      document.getElementById('gabunganArea');
+
+   function updateMetode() {
+
+      if (cash.checked && qris.checked) {
+
+         metodeBayar.value = 'Gabungan';
+         gabunganArea.style.display = 'block';
+
+      } else if (cash.checked) {
+
+         metodeBayar.value = 'Cash';
+         gabunganArea.style.display = 'none';
+
+      } else if (qris.checked) {
+
+         metodeBayar.value = 'QRIS';
+         gabunganArea.style.display = 'none';
+
+      } else {
+
+         metodeBayar.value = '';
+         gabunganArea.style.display = 'none';
+
+      }
+   }
+
+   cash.addEventListener('change', updateMetode);
+   qris.addEventListener('change', updateMetode);
+
+   updateMetode();
+
+   function toggleMetodeBayar() {
+
+      if (metodeBayar.value === 'Gabungan') {
+
+         gabunganArea.style.display = 'block';
+
+      } else {
+
+         gabunganArea.style.display = 'none';
+
+      }
+   }
+
+   metodeBayar.addEventListener(
+      'change',
+      toggleMetodeBayar
+   );
+
+   toggleMetodeBayar();
 </script>
 <?= $this->endSection() ?>

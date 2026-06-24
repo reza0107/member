@@ -158,6 +158,15 @@
                </select>
             </div>
 
+            <div>
+               <select id="filterMetode" class="form-control">
+                  <option value="">Semua Pembayaran</option>
+                  <option value="Cash">Cash</option>
+                  <option value="QRIS">QRIS</option>
+                  <option value="Gabungan">Cash + QRIS</option>
+               </select>
+            </div>
+
             <div class="col-md-2 mb-2">
                <button
                   type="button"
@@ -205,6 +214,7 @@
                <th><b>Paket</b></th>
                <th><b>Tanggal Daftar</b></th>
                <th><b>Nominal</b></th>
+               <th><b>Pembayaran</b></th>
                <th><b>Expired</b></th>
                <th><b>Status</b></th>
                <th width="1%"><b>Aksi</b></th>
@@ -225,6 +235,44 @@
 
                      <td>
                         Rp <?= number_format($value['nominal'], 0, ',', '.'); ?>
+                     </td>
+
+                     <td>
+
+                        <?php if ($value['metode_bayar'] == 'Cash'): ?>
+
+                           <span class="badge badge-success">
+                              Cash
+                           </span>
+
+                        <?php elseif ($value['metode_bayar'] == 'QRIS'): ?>
+
+                           <span class="badge badge-info">
+                              QRIS
+                           </span>
+
+                        <?php elseif ($value['metode_bayar'] == 'Gabungan'): ?>
+
+                           <span class="badge badge-warning">
+                              Cash + QRIS
+                           </span>
+
+                           <br>
+
+                           <small>
+                              Cash:
+                              Rp <?= number_format($value['bayar_cash'], 0, ',', '.') ?>
+                           </small>
+
+                           <br>
+
+                           <small>
+                              QRIS:
+                              Rp <?= number_format($value['bayar_qris'], 0, ',', '.') ?>
+                           </small>
+
+                        <?php endif; ?>
+
                      </td>
 
                      <td><?= $value['tanggal_expired']; ?></td>
@@ -357,11 +405,11 @@
             let tanggal = $(this).find('td:eq(5)').text().trim();
 
             let statusMember = $(this)
-               .find('td:eq(8) .badge')
+               .find('td:eq(9) .badge')
                .text()
                .trim();
 
-            let tanggalExpired = $(this).find('td:eq(7)').text().trim();
+            let tanggalExpired = $(this).find('td:eq(8)').text().trim();
 
             let tampil = true;
 
@@ -429,7 +477,7 @@
             $(this).toggle(tampil);
 
             console.log(
-               $(this).find('td:eq(8)').text().trim()
+               $(this).find('td:eq(9)').text().trim()
             );
 
          });

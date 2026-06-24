@@ -1,14 +1,9 @@
 <?= $this->extend('templates/starting_page_layout'); ?>
 
 <?= $this->section('navaction') ?>
-<a href="<?= base_url('/admin'); ?> " class="btn btn-primary pull-right pl-3">
+<a href="<?= base_url('/login'); ?> " class="btn btn-primary pull-right pl-3">
    <i class="material-icons mr-2">dashboard</i>
    Dashboard
-</a>
-
-<a href="<?= base_url('/logout'); ?> " class="btn btn-danger pull-right pl-3">
-   <i class="material-icons mr-2">exit_to_app</i>
-   Logout
 </a>
 <?= $this->endSection() ?>
 
@@ -32,11 +27,6 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
                         <div class="col-md-6">
                            <h4 class="card-title"><b>Absen <?= $waktu; ?></b></h4>
                            <p class="card-category text-nowrap">Silahkan tunjukkan QR Code anda</p>
-                        </div>
-                        <div class="col-md-6 d-flex justify-content-center justify-content-md-end">
-                           <a href="<?= base_url("scan/$oppBtn"); ?>" class="btn btn-<?= $oppBtn == 'masuk' ? 'success' : 'warning'; ?> px-3">
-                              Absen <?= $oppBtn; ?>
-                           </a>
                         </div>
                      </div>
                   </div>
@@ -93,6 +83,24 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
 
                   <div id="hasilScan" class="px-5 pb-4 pt-1"></div>
                   <br>
+
+
+                  <hr>
+
+                  <button
+                     type="button"
+                     class="btn btn-success btn-lg btn-block"
+                     data-toggle="modal"
+                     data-target="#modalMemberHarian">
+
+                     <i class="material-icons">person_add</i>
+                     Tambah Member Harian
+
+                  </button>
+
+                  <?= csrf_field(); ?>
+
+                  </form>
                </div>
             </div>
             <div class="col-lg-3 col-xxl-3 order-2 order-lg-1">
@@ -125,6 +133,94 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
 </div>
 </div>
 
+<div class="modal fade" id="modalMemberHarian">
+
+   <div class="modal-dialog">
+
+      <div class="modal-content">
+
+         <form action="<?= base_url('scan/member-harian') ?>" method="post">
+
+            <?= csrf_field() ?>
+
+            <div class="modal-header">
+               <h4 class="modal-title">
+                  Member Harian
+               </h4>
+            </div>
+
+            <div class="modal-body">
+
+               <div class="form-group">
+
+                  <label>Metode Pembayaran</label>
+
+                  <select
+                     name="metode_bayar"
+                     id="metode_bayar_harian"
+                     class="form-control">
+
+                     <option value="Cash">Cash</option>
+                     <option value="QRIS">QRIS</option>
+                     <option value="Gabungan">Cash + QRIS</option>
+
+                  </select>
+
+               </div>
+
+               <div id="gabungan_harian" style="display:none;">
+
+                  <div class="form-group">
+                     <label>Bayar Cash</label>
+
+                     <input
+                        type="number"
+                        name="bayar_cash"
+                        class="form-control"
+                        value="0">
+                  </div>
+
+                  <div class="form-group">
+                     <label>Bayar QRIS</label>
+
+                     <input
+                        type="number"
+                        name="bayar_qris"
+                        class="form-control"
+                        value="0">
+                  </div>
+
+               </div>
+
+               <div class="alert alert-info">
+
+                  Nominal Member Harian:
+                  <b>Rp 25.000</b>
+
+               </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+               <button
+                  type="submit"
+                  class="btn btn-success">
+
+                  Simpan
+
+               </button>
+
+            </div>
+
+         </form>
+
+      </div>
+
+   </div>
+
+</div>
+
 <script type="text/javascript" src="<?= base_url('assets/js/plugins/zxing/zxing.min.js') ?>"></script>
 <script src="<?= base_url('assets/js/core/jquery-3.5.1.min.js') ?>"></script>
 <script type="text/javascript">
@@ -132,6 +228,20 @@ $waktu == 'Masuk' ? $oppBtn = 'pulang' : $oppBtn = 'masuk';
    let audio = new Audio("<?= base_url('assets/audio/beep.mp3'); ?>");
    const codeReader = new ZXing.BrowserMultiFormatReader();
    const sourceSelect = $('#pilihKamera');
+
+   $('#metode_bayar_harian').change(function() {
+
+      if ($(this).val() == 'Gabungan') {
+
+         $('#gabungan_harian').show();
+
+      } else {
+
+         $('#gabungan_harian').hide();
+
+      }
+
+   });
 
    $(document).on('change', '#pilihKamera', function() {
       selectedDeviceId = $(this).val();

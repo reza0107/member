@@ -39,12 +39,16 @@
 <h3>Ringkasan Pendapatan</h3>
 
 <table border="1" width="100%" cellspacing="0" cellpadding="5">
+    <tr style="background:#cfe2f3;font-weight:bold;">
+        <th colspan="2">Pendapatan Member</th>
+    </tr>
 
-    ```
     <tr style="background:#d9ead3;font-weight:bold;">
         <th>No</th>
         <th>Paket</th>
         <th>Jumlah Member</th>
+        <th>Cash</th>
+        <th>QRIS</th>
         <th>Total Pendapatan</th>
     </tr>
 
@@ -67,6 +71,14 @@
             </td>
 
             <td align="right">
+                Rp <?= number_format($row['cash'], 0, ',', '.') ?>
+            </td>
+
+            <td align="right">
+                Rp <?= number_format($row['qris'], 0, ',', '.') ?>
+            </td>
+
+            <td align="right">
                 Rp <?= number_format($row['nominal'], 0, ',', '.') ?>
             </td>
 
@@ -74,9 +86,63 @@
 
     <?php endforeach; ?>
 
-    <tr style="font-weight:bold;background:#f4cccc;">
+</table>
 
-        <td colspan="2" align="center">
+<br>
+
+<table border="1" width="100%" cellspacing="0" cellpadding="5">
+
+    <tr style="background:#f4cccc;font-weight:bold;">
+
+        <td colspan="2" align="LEFT">
+            TOTAL
+        </td>
+
+        <td align="center">
+            <?= $totalMember ?>
+        </td>
+
+        <td align="right">
+            Rp <?= number_format($totalCash, 0, ',', '.') ?>
+        </td>
+
+        <td align="right">
+            Rp <?= number_format($totalQris, 0, ',', '.') ?>
+        </td>
+
+        <td align="right">
+            Rp <?= number_format($totalPendapatan, 0, ',', '.') ?>
+        </td>
+
+    </tr>
+
+    <tr>
+
+        <td colspan="2" align="LEFT">
+            PENJUALAN BARANG
+        </td>
+
+        <td align="center">
+            -
+        </td>
+
+        <td align="right">
+            Rp <?= number_format($barangCash ?? 0, 0, ',', '.') ?>
+        </td>
+
+        <td align="right">
+            Rp <?= number_format($barangQris ?? 0, 0, ',', '.') ?>
+        </td>
+
+        <td align="right">
+            Rp <?= number_format($totalPenjualanBarang ?? 0, 0, ',', '.') ?>
+        </td>
+
+    </tr>
+
+    <tr style="background:#d9ead3;font-weight:bold;">
+
+        <td colspan="2" align="LEFT">
             GRAND TOTAL
         </td>
 
@@ -85,64 +151,33 @@
         </td>
 
         <td align="right">
-            Rp <?= number_format($totalPendapatan, 0, ',', '.') ?>
+            Rp <?= number_format(
+                    $totalCash + ($barangCash ?? 0),
+                    0,
+                    ',',
+                    '.'
+                ) ?>
+        </td>
+
+        <td align="right">
+            Rp <?= number_format(
+                    $totalQris + ($barangQris ?? 0),
+                    0,
+                    ',',
+                    '.'
+                ) ?>
+        </td>
+
+        <td align="right">
+            Rp <?= number_format(
+                    $totalPendapatan + ($totalPenjualanBarang ?? 0),
+                    0,
+                    ',',
+                    '.'
+                ) ?>
         </td>
 
     </tr>
-    ```
-
-</table>
-
-<br>
-
-<h3>Detail Member Yang Hadir</h3>
-
-<table border="1" width="100%" cellspacing="0" cellpadding="5">
-
-    ```
-    <tr style="background:#cfe2f3;font-weight:bold;">
-        <th>No</th>
-        <th>Nama Member</th>
-        <th>Paket</th>
-        <th>Tanggal Daftar</th>
-        <th>Tanggal Expired</th>
-        <th>Nominal</th>
-    </tr>
-
-    <?php $no = 1; ?>
-
-    <?php foreach ($detailMember as $member): ?>
-
-        <tr>
-
-            <td align="center">
-                <?= $no++ ?>
-            </td>
-
-            <td>
-                <?= $member['nama_member'] ?>
-            </td>
-
-            <td align="center">
-                <?= $member['paket'] ?>
-            </td>
-
-            <td align="center">
-                <?= $member['tanggal_daftar'] ?>
-            </td>
-
-            <td align="center">
-                <?= $member['tanggal_expired'] ?>
-            </td>
-
-            <td align="right">
-                Rp <?= number_format($member['nominal'], 0, ',', '.') ?>
-            </td>
-
-        </tr>
-
-    <?php endforeach; ?>
-    ```
 
 </table>
 

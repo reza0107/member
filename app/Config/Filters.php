@@ -80,7 +80,6 @@ class Filters extends BaseFilters
     public array $globals = [
         'before' => [
             'honeypot',
-            'login'
             // 'csrf',
             // 'invalidchars',
         ],
@@ -120,6 +119,8 @@ class Filters extends BaseFilters
             'before' => [
                 'admin/',
                 'admin/*',
+                'teacher',
+                'teacher/*',
                 'register/',
             ]
         ]

@@ -64,53 +64,97 @@ class GenerateLaporan extends BaseController
       $type = $this->request->getVar('type');
       $paketFilter = $this->request->getVar('paket');
 
-      $rekap = [
-         '1 Hari' => ['jumlah' => 0, 'nominal' => 0],
-         '1 Bulan' => ['jumlah' => 0, 'nominal' => 0],
-         '3 Bulan' => ['jumlah' => 0, 'nominal' => 0],
-         '6 Bulan' => ['jumlah' => 0, 'nominal' => 0],
-         '12 Bulan' => ['jumlah' => 0, 'nominal' => 0],
-      ];
+      $rekap = [];
 
-      $query = $this->presensimemberModel
-         ->select('tb_presensi_member.*, tb_member.nama_member, tb_member.paket, tb_member.nominal, tb_member.tanggal_daftar, tb_member.tanggal_expired')
-         ->join('tb_member', 'tb_member.id_member = tb_presensi_member.id_member')
-         ->where('tanggal >=', $awal)
-         ->where('tanggal <=', $akhir);
+      $query = $this->memberModel
+         ->where('tanggal_daftar >=', $awal)
+         ->where('tanggal_daftar <=', $akhir);
 
       if ($paketFilter != 'all') {
-         $query->where('tb_member.paket', $paketFilter);
+         $query->where('paket', $paketFilter);
       }
 
-      $presensi = $query
-         ->groupBy('tb_presensi_member.id_member')
+      $detailMember = $query
+         ->orderBy('tanggal_daftar', 'ASC')
          ->findAll();
 
       $totalMember = 0;
       $totalPendapatan = 0;
+      $totalCash = 0;
+      $totalQris = 0;
 
-      foreach ($presensi as $p) {
+      foreach ($detailMember as $p) {
 
          $paket = $p['paket'];
 
          if (!isset($rekap[$paket])) {
-            continue;
+
+            $rekap[$paket] = [
+               'jumlah'  => 0,
+               'nominal' => 0,
+               'cash'    => 0,
+               'qris'    => 0
+            ];
          }
 
          $rekap[$paket]['jumlah']++;
          $rekap[$paket]['nominal'] += $p['nominal'];
 
+         // CASH
+         if ($p['metode_bayar'] == 'Cash') {
+
+            $rekap[$paket]['cash'] += $p['nominal'];
+            $totalCash += $p['nominal'];
+         }
+
+         // QRIS
+         elseif ($p['metode_bayar'] == 'QRIS') {
+
+            $rekap[$paket]['qris'] += $p['nominal'];
+            $totalQris += $p['nominal'];
+         }
+
+         // GABUNGAN
+         elseif ($p['metode_bayar'] == 'Gabungan') {
+
+            $rekap[$paket]['cash'] += (int)$p['bayar_cash'];
+            $rekap[$paket]['qris'] += (int)$p['bayar_qris'];
+
+            $totalCash += (int)$p['bayar_cash'];
+            $totalQris += (int)$p['bayar_qris'];
+         }
+
          $totalMember++;
          $totalPendapatan += $p['nominal'];
       }
 
+      $urutanPaket = [
+         '1 Hari'  => 1,
+         '1 Bulan' => 2,
+         '3 Bulan' => 3,
+         '6 Bulan' => 4,
+         '12 Bulan' => 5
+      ];
+
+      uksort($rekap, function ($a, $b) use ($urutanPaket) {
+         return $urutanPaket[$a] <=> $urutanPaket[$b];
+      });
+
       $data = [
-         'detailMember' => $presensi,
+         'detailMember' => $detailMember,
          'awal' => $awal,
          'akhir' => $akhir,
+
          'rekap' => $rekap,
+
          'totalMember' => $totalMember,
          'totalPendapatan' => $totalPendapatan,
+
+         'totalCash' => $totalCash,
+         'totalQris' => $totalQris,
+
+         'totalPenjualanBarang' => 0,
+
          'paketFilter' => $paketFilter,
          'grup' => 'member'
       ];

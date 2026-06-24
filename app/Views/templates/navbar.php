@@ -30,18 +30,6 @@
                </a>
             </li> -->
             <li class="nav-item dropdown">
-               <a class="nav-link" href="javascript:;" id="navbarDropdownScan" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="material-icons">qr_code</i>
-                  <p class="d-lg-none d-md-block">
-                     Scan
-                  </p>
-               </a>
-               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownScan">
-                  <a class="dropdown-item" href="<?= base_url('scan/masuk'); ?>">Absen masuk</a>
-                  <a class="dropdown-item" href="<?= base_url('scan/pulang'); ?>">Absen pulang</a>
-               </div>
-            </li>
-            <li class="nav-item dropdown">
                <a class="nav-link <?= is_superadmin() ? 'text-danger' : ''; ?>" href="javascript:;" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="material-icons">person</i>
                   <p class="d-lg-none d-md-block">

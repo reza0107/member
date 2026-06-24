@@ -18,7 +18,10 @@ class memberModel extends Model
       'status',
       'qr_code',
       'unique_code',
-      'rfid_code'
+      'rfid_code',
+      'metode_bayar',
+      'bayar_cash',
+      'bayar_qris'
    ];
 
    protected $table = 'tb_member';
@@ -48,7 +51,11 @@ class memberModel extends Model
       $alamat,
       $noHp,
       $paket,
-      $rfid = null
+      $rfid = null,
+      $metodeBayar = null,
+      $bayarCash = 0,
+      $bayarQris = 0
+
    ) {
       $tanggalDaftar = date('Y-m-d');
 
@@ -102,7 +109,10 @@ class memberModel extends Model
          'status' => 'Aktif',
          'unique_code' => $uniqueCode,
          'qr_code' => $uniqueCode,
-         'rfid_code' => $rfid
+         'rfid_code' => $rfid,
+         'metode_bayar' => $metodeBayar,
+         'bayar_cash' => $bayarCash,
+         'bayar_qris' => $bayarQris
       ]);
    }
 
@@ -116,7 +126,10 @@ class memberModel extends Model
       $paket,
       $nominal,
       $tanggalDaftar,
-      $tanggalExpired
+      $tanggalExpired,
+      $metodeBayar = null,
+      $bayarCash = 0,
+      $bayarQris = 0
    ) {
       return $this->update($id, [
          'nama_member'      => $nama,
@@ -127,7 +140,10 @@ class memberModel extends Model
          'no_hp'            => $noHp,
          'rfid_code'        => $rfid,
          'paket'            => $paket,
-         'nominal'          => $nominal
+         'nominal'          => $nominal,
+         'metode_bayar'     => $metodeBayar,
+         'bayar_cash'       => $bayarCash,
+         'bayar_qris'       => $bayarQris
       ]);
    }
 
