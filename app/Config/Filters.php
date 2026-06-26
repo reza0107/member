@@ -41,6 +41,8 @@ class Filters extends BaseFilters
         'login'         => LoginFilter::class,
         'role'          => RoleFilter::class,
         'permission'    => PermissionFilter::class,
+
+        'loginredirect' => \App\Filters\LoginRedirect::class,
     ];
 
     /**

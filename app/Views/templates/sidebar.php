@@ -11,6 +11,7 @@ switch ($context) {
    case 'backup':
    case 'penjualan-barang':
    case 'barang':
+   case 'riwayat':
    case 'kasir':
       $sidebarColor = 'danger';
       break;
@@ -21,39 +22,156 @@ switch ($context) {
 }
 
 if (is_wali_kelas()) {
+
    $menuItems = [
-      ['title' => 'Dashboard Wali Kelas', 'url' => 'teacher/dashboard', 'icon' => 'dashboard', 'context' => 'dashboard', 'visible' => true],
-      ['title' => 'Laporan Kelas', 'url' => 'teacher/laporan', 'icon' => 'print', 'context' => 'laporan-kelas', 'visible' => true],
-      ['title' => 'QR Code Siswa', 'url' => 'teacher/qr', 'icon' => 'qr_code', 'context' => 'qr', 'visible' => true],
-      ['title' => 'Manajemen Kehadiran', 'url' => 'teacher/attendance', 'icon' => 'event_note', 'context' => 'attendance', 'visible' => true],
-   ];
-} else {
-   $menuItems = [
-      ['title' => 'Dashboard', 'url' => 'admin/dashboard', 'icon' => 'dashboard', 'context' => 'dashboard', 'visible' => true],
-      ['title' => 'Absensi member', 'url' => 'admin/absen-member', 'icon' => 'checklist', 'context' => 'absen-member', 'visible' => true],
-      ['title' => 'Data member', 'url' => 'admin/member', 'icon' => 'person_4', 'context' => 'member', 'visible' => is_superadmin()],
-      [
-         'title' => 'Master Barang',
-         'url' => 'admin/barang',
-         'icon' => 'inventory_2',
-         'context' => 'barang',
-         'visible' => is_superadmin()
-      ],
 
       [
-         'title' => 'Kasir',
-         'url' => 'admin/kasir',
-         'icon' => 'shopping_cart',
-         'context' => 'kasir',
+         'title' => 'Dashboard Wali Kelas',
+         'url' => 'teacher/dashboard',
+         'icon' => 'dashboard',
+         'context' => 'dashboard',
          'visible' => true
       ],
-      ['title' => 'Generate QR Code', 'url' => 'admin/generate', 'icon' => 'qr_code', 'context' => 'qr', 'visible' => can_generate_qr()],
-      ['title' => 'Penjualan Barang', 'url' => 'admin/penjualan-barang', 'icon' => 'shopping_cart', 'context' => 'penjualan-barang', 'visible' => true],
-      ['title' => 'Generate Laporan', 'url' => 'admin/laporan', 'icon' => 'print', 'context' => 'laporan', 'visible' => can_view_report()],
-      ['title' => 'Data Petugas', 'url' => 'admin/petugas', 'icon' => 'computer', 'context' => 'petugas', 'visible' => is_superadmin()],
-      ['title' => 'Pengaturan', 'url' => 'admin/general-settings', 'icon' => 'settings', 'context' => 'general_settings', 'visible' => is_superadmin() || is_kepsek()],
-      ['title' => 'Backup & Restore', 'url' => 'admin/backup', 'icon' => 'backup', 'context' => 'backup', 'visible' => is_superadmin()],
+      [
+         'title' => 'Laporan Kelas',
+         'url' => 'teacher/laporan',
+         'icon' => 'print',
+         'context' => 'laporan-kelas',
+         'visible' => true
+      ],
+      [
+         'title' => 'QR Code Siswa',
+         'url' => 'teacher/qr',
+         'icon' => 'qr_code',
+         'context' => 'qr',
+         'visible' => true
+      ],
+      [
+         'title' => 'Manajemen Kehadiran',
+         'url' => 'teacher/attendance',
+         'icon' => 'event_note',
+         'context' => 'attendance',
+         'visible' => true
+      ],
+
    ];
+} else {
+
+   // ==========================
+   // ADMIN
+   // ==========================
+   if (user()->is_superadmin == 1) {
+
+      $menuItems = [
+
+         [
+            'title' => 'Dashboard',
+            'url' => 'admin/dashboard',
+            'icon' => 'dashboard',
+            'context' => 'dashboard',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Absensi member',
+            'url' => 'admin/absen-member',
+            'icon' => 'checklist',
+            'context' => 'absen-member',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Data member',
+            'url' => 'admin/member',
+            'icon' => 'person_4',
+            'context' => 'member',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Generate QR Code',
+            'url' => 'admin/generate',
+            'icon' => 'qr_code',
+            'context' => 'qr',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Master Barang',
+            'url' => 'admin/barang',
+            'icon' => 'inventory_2',
+            'context' => 'barang',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Kasir',
+            'url' => 'admin/kasir',
+            'icon' => 'shopping_cart',
+            'context' => 'kasir',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Generate Laporan',
+            'url' => 'admin/laporan',
+            'icon' => 'print',
+            'context' => 'laporan',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Data Petugas',
+            'url' => 'admin/petugas',
+            'icon' => 'computer',
+            'context' => 'petugas',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Pengaturan',
+            'url' => 'admin/general-settings',
+            'icon' => 'settings',
+            'context' => 'general_settings',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Backup & Restore',
+            'url' => 'admin/backup',
+            'icon' => 'backup',
+            'context' => 'backup',
+            'visible' => true
+         ]
+
+      ];
+   }
+
+   // ==========================
+   // KASIR
+   // ==========================
+   else {
+
+      $menuItems = [
+
+         [
+            'title' => 'Kasir',
+            'url' => 'admin/kasir',
+            'icon' => 'shopping_cart',
+            'context' => 'kasir',
+            'visible' => true
+         ],
+
+         [
+            'title' => 'Riwayat Penjualan',
+            'url' => 'admin/kasir/riwayat',
+            'icon' => 'receipt_long',
+            'context' => 'riwayat',
+            'visible' => true
+         ]
+
+      ];
+   }
 }
 ?>
 <div class="sidebar" data-color="<?= $sidebarColor; ?>" data-image="<?= base_url('assets/img/sidebar/RajaGym.jpeg'); ?>">

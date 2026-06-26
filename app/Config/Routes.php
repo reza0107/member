@@ -65,7 +65,6 @@ $routes->get('/', function () {
    return redirect()->to('/login');
 });
 
-
 // Scan
 $routes->group('scan', function (RouteCollection $routes) {
    $routes->post('member-harian', 'Scan::memberHarian');
@@ -189,30 +188,44 @@ $routes->group('admin', ['filter' => 'login'], function (RouteCollection $routes
    $routes->get('qr/member/(:any)/download', 'Admin\QRGenerator::downloadQrmember/$1');
 
    // admin penjualan barang
-   $routes->get(
-      'penjualan-barang',
-      'Admin\PenjualanBarang::index'
-   );
+   $routes->get('barang', 'Admin\Barang::index');
 
-   $routes->post(
-      'penjualan-barang/create',
-      'Admin\PenjualanBarang::create'
-   );
+   $routes->get('barang/create', 'Admin\Barang::create');
 
-   $routes->get(
-      'penjualan-barang/edit/(:num)',
-      'Admin\PenjualanBarang::edit/$1'
-   );
+   $routes->post('barang/store', 'Admin\Barang::store');
 
-   $routes->post(
-      'penjualan-barang/update',
-      'Admin\PenjualanBarang::update'
-   );
+   $routes->get('barang/edit/(:num)', 'Admin\Barang::edit/$1');
 
-   $routes->delete(
-      'penjualan-barang/delete/(:num)',
-      'Admin\PenjualanBarang::delete/$1'
-   );
+   $routes->post('barang/update', 'Admin\Barang::update');
+
+   $routes->get('barang/delete/(:num)', 'Admin\Barang::delete/$1');
+
+   // admin kasir
+   $routes->get('kasir', 'Admin\Kasir::index');
+
+   $routes->get('kasir/kategori/(:any)', 'Admin\Kasir::kategori/$1');
+
+   $routes->post('kasir/tambahKeranjang', 'Admin\Kasir::tambahKeranjang');
+
+   $routes->post('kasir/updateQty', 'Admin\Kasir::updateQty');
+
+   $routes->post('kasir/hapusKeranjang', 'Admin\Kasir::hapusKeranjang');
+
+   $routes->get('kasir/keranjang', 'Admin\Kasir::keranjang');
+
+   $routes->post('kasir/checkout', 'Admin\Kasir::checkout');
+
+   $routes->get('kasir/cari', 'Admin\Kasir::cariBarang');
+
+   $routes->get('kasir/batal', 'Admin\Kasir::batal');
+
+   $routes->get('kasir/riwayat', 'Admin\Kasir::riwayat');
+   $routes->get('kasir/kurang/(:num)', 'Admin\Kasir::kurang/$1');
+   $routes->get('kasir/tambah/(:num)', 'Admin\Kasir::tambah/$1');
+   $routes->get('kasir/hapus/(:num)', 'Admin\Kasir::hapus/$1');
+
+   $routes->get('kasir/detail/(:num)', 'Admin\Kasir::detail/$1');
+   $routes->get('kasir/thermal/(:num)','Admin\Kasir::thermal/$1');
 
    // admin buat laporan
    $routes->get('laporan', 'Admin\GenerateLaporan::index');

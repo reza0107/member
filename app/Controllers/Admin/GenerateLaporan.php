@@ -13,6 +13,7 @@ use App\Models\KelasModel;
 use App\Models\PresensimemberModel;
 use App\Models\SiswaModel;
 use App\Models\PresensiSiswaModel;
+use App\Models\PenjualanModel;
 
 class GenerateLaporan extends BaseController
 {
@@ -24,6 +25,8 @@ class GenerateLaporan extends BaseController
    protected PresensiSiswaModel $presensiSiswaModel;
    protected PresensimemberModel $presensimemberModel;
 
+   protected PenjualanModel $penjualanModel;
+
    public function __construct()
    {
       $this->siswaModel = new SiswaModel();
@@ -33,6 +36,7 @@ class GenerateLaporan extends BaseController
 
       $this->presensiSiswaModel = new PresensiSiswaModel();
       $this->presensimemberModel = new PresensimemberModel();
+      $this->penjualanModel = new PenjualanModel();
    }
 
    public function index()
@@ -140,6 +144,28 @@ class GenerateLaporan extends BaseController
          return $urutanPaket[$a] <=> $urutanPaket[$b];
       });
 
+      // ===============================
+      // PENJUALAN BARANG
+      // ===============================
+
+      $penjualanBarang = $this->penjualanModel
+         ->where('DATE(tanggal) >=', $awal)
+         ->where('DATE(tanggal) <=', $akhir)
+         ->findAll();
+
+      $barangCash = 0;
+      $barangQris = 0;
+      $totalPenjualanBarang = 0;
+
+      foreach ($penjualanBarang as $row) {
+
+         $barangCash += (int)$row['bayar_cash'];
+
+         $barangQris += (int)$row['bayar_qris'];
+
+         $totalPenjualanBarang += (int)$row['total'];
+      }
+
       $data = [
          'detailMember' => $detailMember,
          'awal' => $awal,
@@ -153,7 +179,10 @@ class GenerateLaporan extends BaseController
          'totalCash' => $totalCash,
          'totalQris' => $totalQris,
 
-         'totalPenjualanBarang' => 0,
+         // dari kasir
+         'barangCash' => $barangCash,
+         'barangQris' => $barangQris,
+         'totalPenjualanBarang' => $totalPenjualanBarang,
 
          'paketFilter' => $paketFilter,
          'grup' => 'member'
