@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 26 Jun 2026 pada 13.21
+-- Waktu pembuatan: 29 Jun 2026 pada 08.51
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.1.25
 
@@ -153,7 +153,14 @@ INSERT INTO `auth_logins` (`id`, `ip_address`, `email`, `user_id`, `date`, `succ
 (62, '::1', 'adminsuper@gmail.com', 1, '2026-06-26 17:36:09', 1),
 (63, '::1', 'kasir@rajagym.com', 2, '2026-06-26 17:37:33', 1),
 (64, '::1', 'kasir@rajagym.com', 2, '2026-06-26 17:41:00', 1),
-(65, '::1', 'adminsuper@gmail.com', 1, '2026-06-26 18:08:26', 1);
+(65, '::1', 'adminsuper@gmail.com', 1, '2026-06-26 18:08:26', 1),
+(66, '::1', 'kasir', NULL, '2026-06-29 09:53:34', 0),
+(67, '::1', 'adminsuper@gmail.com', 1, '2026-06-29 09:53:43', 1),
+(68, '::1', 'kasir@kasir.com', 3, '2026-06-29 09:57:16', 1),
+(69, '::1', 'adminsuper@gmail.com', 1, '2026-06-29 10:23:49', 1),
+(70, '::1', 'kasir', NULL, '2026-06-29 13:18:32', 0),
+(71, '::1', 'kasir@kasir.com', 3, '2026-06-29 13:18:38', 1),
+(72, '::1', 'adminsuper@gmail.com', 1, '2026-06-29 13:19:44', 1);
 
 -- --------------------------------------------------------
 
@@ -281,8 +288,8 @@ CREATE TABLE `tb_barang` (
 INSERT INTO `tb_barang` (`id_barang`, `nama_barang`, `kategori`, `harga_beli`, `harga_jual`, `stok`, `created_at`) VALUES
 (1, 'Air Mineral', 'Minuman', 3000, 5000, 43, '2026-06-25 04:29:45'),
 (2, 'Teh Botol', 'Minuman', 4500, 7000, 44, '2026-06-25 04:29:45'),
-(3, 'Mie Instan', 'Makanan', 2500, 5000, 98, '2026-06-25 04:29:45'),
-(4, 'Roti Coklat', 'Makanan', 4000, 7000, 48, '2026-06-25 04:29:45'),
+(3, 'Mie Instan', 'Makanan', 2500, 5000, 100, '2026-06-25 04:29:45'),
+(4, 'Roti Coklat', 'Makanan', 4000, 7000, 49, '2026-06-25 04:29:45'),
 (5, 'Whey Protein', 'Susu Suplemen', 250000, 350000, 16, '2026-06-25 04:29:45');
 
 -- --------------------------------------------------------
@@ -300,14 +307,6 @@ CREATE TABLE `tb_detail_penjualan` (
   `qty` int(11) DEFAULT NULL,
   `subtotal` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `tb_detail_penjualan`
---
-
-INSERT INTO `tb_detail_penjualan` (`id_detail`, `id_penjualan`, `id_barang`, `nama_barang`, `harga`, `qty`, `subtotal`) VALUES
-(10, 6, 3, 'Mie Instan', 5000, 2, 10000),
-(11, 6, 4, 'Roti Coklat', 7000, 1, 7000);
 
 -- --------------------------------------------------------
 
@@ -425,7 +424,7 @@ INSERT INTO `tb_member` (`id_member`, `nama_member`, `no_hp`, `jenis_kelamin`, `
 (33, 'Harian 1 24-06-2026', '-', 'Laki-laki', '-', '1 Hari', '2026-06-24', '2026-06-24', 'Expired', 'HRN-20260624-0001', 'HRN-20260624-0001', NULL, 25000, 'Cash', 25000, 0),
 (34, 'Harian 2 24-06-2026', '-', 'Laki-laki', '-', '1 Hari', '2026-06-24', '2026-06-24', 'Expired', 'HRN-20260624-0002', 'HRN-20260624-0002', NULL, 25000, 'QRIS', 0, 25000),
 (35, 'Harian 3 24-06-2026', '-', 'Laki-laki', '-', '1 Hari', '2026-06-24', '2026-06-24', 'Expired', 'HRN-20260624-0003', 'HRN-20260624-0003', NULL, 25000, 'Gabungan', 20000, 5000),
-(36, 'Harian 1 26-06-2026', '-', 'Laki-laki', '-', '1 Hari', '2026-06-26', '2026-06-26', 'Aktif', 'HRN-20260626-0001', 'HRN-20260626-0001', NULL, 25000, 'QRIS', 0, 25000);
+(36, 'Harian 1 26-06-2026', '-', 'Laki-laki', '-', '1 Hari', '2026-06-26', '2026-06-26', 'Expired', 'HRN-20260626-0001', 'HRN-20260626-0001', NULL, 25000, 'QRIS', 0, 25000);
 
 -- --------------------------------------------------------
 
@@ -447,13 +446,6 @@ CREATE TABLE `tb_penjualan` (
   `kasir` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `tb_penjualan`
---
-
-INSERT INTO `tb_penjualan` (`id_penjualan`, `kode_penjualan`, `tanggal`, `total_barang`, `subtotal`, `diskon`, `total`, `metode_bayar`, `bayar_cash`, `bayar_qris`, `kasir`, `created_at`) VALUES
-(6, 'INV20260626165742', '2026-06-26 16:57:42', 3, 17000, 0, 17000, 'Cash', 17000, 0, 'superadmin', '2026-06-26 09:57:42');
 
 -- --------------------------------------------------------
 
@@ -567,7 +559,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `id_member`, `email`, `username`, `role`, `is_superadmin`, `password_hash`, `reset_hash`, `reset_at`, `reset_expires`, `activate_hash`, `status`, `status_message`, `active`, `force_pass_reset`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, NULL, 'adminsuper@gmail.com', 'superadmin', 'Superadmin', 1, '$2y$10$VxfRCzJ5AOBZsho7iLSNNub0N.K6dng.5cKZMDbCF6ROhZZ1UfnWi', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, NULL, NULL, NULL),
-(2, NULL, 'kasir@rajagym.com', 'kasirrajagym', 'Kasir', 2, '$2y$10$mS4pElf3RjvEv/.pn35qHehBrEkgcYcG53ZRfSLl8K55qd/.QVkNG', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, NULL, NULL, NULL);
+(3, NULL, 'kasir@kasir.com', 'kasirr', 'Kasir', 4, '$2y$10$HsKQrfdIxXiVU.VXhJMuHO6K7kcbo6x.IU4KDxrUf/A6anqlURWE.', NULL, NULL, NULL, NULL, NULL, NULL, 1, 0, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -756,7 +748,7 @@ ALTER TABLE `auth_groups`
 -- AUTO_INCREMENT untuk tabel `auth_logins`
 --
 ALTER TABLE `auth_logins`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT untuk tabel `auth_permissions`
@@ -798,7 +790,7 @@ ALTER TABLE `tb_barang`
 -- AUTO_INCREMENT untuk tabel `tb_detail_penjualan`
 --
 ALTER TABLE `tb_detail_penjualan`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_jurusan`
@@ -828,7 +820,7 @@ ALTER TABLE `tb_member`
 -- AUTO_INCREMENT untuk tabel `tb_penjualan`
 --
 ALTER TABLE `tb_penjualan`
-  MODIFY `id_penjualan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_penjualan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `tb_penjualan_barang`
@@ -858,7 +850,7 @@ ALTER TABLE `tb_siswa`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
