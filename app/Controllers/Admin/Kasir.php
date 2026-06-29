@@ -16,10 +16,13 @@ class Kasir extends BaseController
 
     public function __construct()
     {
+        if (!is_superadmin() && !is_kasir()) {
+
+            exit('Akses Ditolak');
+        }
+
         $this->barangModel = new BarangModel();
-
         $this->penjualanModel = new PenjualanModel();
-
         $this->detailModel = new DetailPenjualanModel();
     }
 
@@ -596,5 +599,43 @@ DETAIL PENJUALAN
                 'detail' => $detail
             ]
         );
+    }
+    public function delete($id)
+    {
+        $db = \Config\Database::connect();
+
+        $db->transStart();
+
+        $detail = $this->detailModel
+            ->where('id_penjualan', $id)
+            ->findAll();
+
+        foreach ($detail as $d) {
+
+            $barang = $this->barangModel->find($d['id_barang']);
+
+            if ($barang) {
+
+                $this->barangModel->update(
+                    $d['id_barang'],
+                    [
+                        'stok' => $barang['stok'] + $d['qty']
+                    ]
+                );
+            }
+        }
+
+        $this->detailModel
+            ->where('id_penjualan', $id)
+            ->delete();
+
+        $this->penjualanModel
+            ->delete($id);
+
+        $db->transComplete();
+
+        return redirect()
+            ->to(base_url('admin/kasir/riwayat'))
+            ->with('msg', 'Transaksi berhasil dihapus');
     }
 }

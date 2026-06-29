@@ -1,3 +1,18 @@
+<?php
+
+use App\Libraries\enums\UserRole;
+
+/** @var array $data */
+/** @var array $member */
+/** @var UserRole[] $roles */
+/** @var array $oldInput */
+
+$data ??= [];
+$member ??= [];
+$roles ??= [];
+$oldInput ??= [];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 <div class="content">

@@ -1,3 +1,10 @@
+<?php
+
+/** @var array $kelas */
+
+$kelas ??= [];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 <div class="content">

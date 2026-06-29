@@ -1,3 +1,14 @@
+<?php
+
+/** @var string $kelas */
+/** @var array $data */
+/** @var bool $lewat */
+
+$kelas ??= '';
+$data ??= [];
+$lewat ??= false;
+
+?>
 <div class="card-body">
     <div class="row">
         <div class="col-auto me-auto">

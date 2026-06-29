@@ -1,3 +1,14 @@
+<?php
+
+/** @var array $siswa */
+/** @var array $kelas */
+/** @var array $member */
+
+$siswa ??= [];
+$kelas ??= [];
+$member ??= [];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 <style>

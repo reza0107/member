@@ -1,3 +1,12 @@
+<?php
+
+/** @var array $data */
+/** @var bool $empty */
+
+$data ??= [];
+$empty ??= true;
+
+?>
 <div class="card-body table-responsive">
    <?php if (!$empty): ?>
       <table class="table table-hover">

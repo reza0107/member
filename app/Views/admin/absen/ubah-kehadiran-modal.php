@@ -1,3 +1,14 @@
+<?php
+
+/** @var array $data */
+/** @var array $listKehadiran */
+/** @var array|null $presensi */
+
+$data ??= [];
+$listKehadiran ??= [];
+$presensi ??= [];
+
+?>
 <div class="modal-body">
    <div class="container-fluid">
       <form id="formUbah">

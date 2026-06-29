@@ -50,6 +50,10 @@ class Dashboard extends BaseController
          return redirect()->to('scan');
       }
 
+      if (is_kasir()) {
+         return redirect()->to('/admin/kasir');
+      }
+
       $now = Time::now();
 
       $dateRange = [];

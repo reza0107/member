@@ -1,3 +1,27 @@
+<?php
+
+/** @var object $generalSettings */
+
+/** @var string $bulan */
+
+/** @var array $tanggal */
+
+/** @var array $listmember */
+
+/** @var array $listAbsen */
+
+/** @var array $jumlahmember */
+
+$tanggal ??= [];
+$listmember ??= [];
+$listAbsen ??= [];
+
+$jumlahmember ??= [
+    'laki' => 0,
+    'perempuan' => 0,
+];
+
+?>
 <?= $this->extend('templates/laporan') ?>
 
 <?= $this->section('content') ?>

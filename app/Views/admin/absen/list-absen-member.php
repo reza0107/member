@@ -1,5 +1,14 @@
 <?php
 
+/** @var array $data */
+/** @var bool $lewat */
+
+$data ??= [];
+$lewat ??= false;
+
+?>
+<?php
+
 use App\Libraries\enums\UserRole; ?>
 <style>
    .absensi-wrapper {

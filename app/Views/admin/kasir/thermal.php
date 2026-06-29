@@ -1,3 +1,12 @@
+<?php
+
+/** @var array $penjualan */
+/** @var array $detail */
+
+$penjualan ??= [];
+$detail ??= [];
+
+?>
 <!DOCTYPE html>
 <html>
 
@@ -8,19 +17,25 @@
     <title>Struk</title>
 
     <style>
+        @page {
+            size: 58mm auto;
+            margin: 0;
+        }
+
+        html,
         body {
 
             width: 58mm;
+
+            margin: 0;
+
+            padding: 3mm;
 
             font-family: monospace;
 
             font-size: 11px;
 
-        }
-
-        .center {
-
-            text-align: center;
+            overflow: hidden;
 
         }
 
@@ -34,13 +49,23 @@
 
         td {
 
-            font-size: 11px;
+            padding: 2px 0;
 
         }
 
         hr {
 
-            border: dashed 1px #000;
+            border: none;
+
+            border-top: 1px dashed #000;
+
+            margin: 4px 0;
+
+        }
+
+        .center {
+
+            text-align: center;
 
         }
     </style>
@@ -180,17 +205,23 @@
     </div>
 
     <script>
-        window.onload = function() {
+        window.onload = () => {
 
-            window.print();
+            setTimeout(() => {
 
-            setTimeout(function() {
+                window.print();
 
-                window.location.href = "<?= base_url('admin/kasir') ?>";
+            }, 200);
 
-            }, 1000);
+            window.onafterprint = () => {
+
+                window.location.href =
+                    "<?= base_url('admin/kasir'); ?>";
+
+            };
 
         };
+        
     </script>
 
 </body>

@@ -1,4 +1,15 @@
-<h3 class="text-danger"><?= $msg; ?></h3>
+<?php
+
+/** @var string|null $msg */
+/** @var array|null $data */
+
+$msg = $msg ?? '';
+$data = $data ?? [];
+
+?>
+<h3 class="text-danger">
+    <?= esc($msg) ?>
+</h3>
 
 <?php if (!empty($data)) : ?>
 <div class="alert alert-warning mt-3">

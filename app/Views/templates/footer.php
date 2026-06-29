@@ -5,7 +5,9 @@
          </ul>
       </nav>
       <div class="copyright float-right">
-         <?= $generalSettings->copyright; ?>
+         <?= isset($generalSettings)
+            ? esc($generalSettings->copyright)
+            : '' ?>
       </div>
    </div>
 </footer>

@@ -22,11 +22,9 @@ function user_role()
     }
 
     // Superadmin
-    if (!empty($user->is_superadmin)) {
-        return \App\Libraries\enums\UserRole::SuperAdmin;
-    }
-
-    return null;
+    return \App\Libraries\enums\UserRole::from(
+        (int)$user->is_superadmin
+    );
 }
 
 function getUserRole(int|string $role): string
@@ -42,23 +40,23 @@ function is_wali_kelas(): bool
         return false;
     }
 
-    return !empty($user->id_member);
+    return user_role() === UserRole::Scanner
+        && !empty($user->id_member);
 }
 
 function is_superadmin(): bool
 {
-    $user = auth_user();
-
-    if (!$user) {
-        return false;
-    }
-
-    return user_role()->isSuperAdmin();
+    return user_role() === \App\Libraries\enums\UserRole::SuperAdmin;
 }
 
 function is_kepsek(): bool
 {
     return user_role() === UserRole::Kepsek;
+}
+
+function is_kasir(): bool
+{
+    return user_role() === \App\Libraries\enums\UserRole::Kasir;
 }
 
 function can_edit_attendance(): bool

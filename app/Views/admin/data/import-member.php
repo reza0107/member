@@ -142,7 +142,7 @@
                 success: function (response) {
                     var objSub = JSON.parse(response);
                     if (objSub.result == 1) {
-                        $("#csv_uploaded_files").prepend('<li class="list-group-item list-group-item-success">&nbsp;' + objSub.index + '.&nbsp;' + objSub.member. + '.&nbsp; - ' + objSub.member.nama_member + '</li>');
+                        $("#csv_uploaded_files").prepend('<li class="list-group-item list-group-item-success">&nbsp;' + objSub.index + '.&nbsp;' + objSub.member.id_member + '.&nbsp; - ' + objSub.member.nama_member + '</li>');
                     } else {
                         $("#csv_uploaded_files").prepend('<li class="list-group-item list-group-item-danger">&nbsp;' + objSub.index + '.</li>');
                     }

@@ -1,3 +1,10 @@
+<?php
+
+/** @var array $barang */
+
+$barang ??= [];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 
 <?= $this->section('content') ?>

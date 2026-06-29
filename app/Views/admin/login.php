@@ -1,3 +1,6 @@
+<?php
+/** @var \Config\Auth $config */
+?>
 <?= $this->extend('templates/starting_page_layout'); ?>
 
 <?= $this->section('navaction') ?>

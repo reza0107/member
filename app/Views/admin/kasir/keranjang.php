@@ -1,3 +1,10 @@
+<?php
+
+/** @var array $cart */
+
+$cart ??= [];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 

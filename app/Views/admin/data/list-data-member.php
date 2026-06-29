@@ -1,3 +1,12 @@
+<?php
+
+/** @var array $data */
+/** @var bool $empty */
+
+$data ??= [];
+$empty ??= true;
+
+?>
 <style>
    .member-wrapper {
       background:

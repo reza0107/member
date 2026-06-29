@@ -11,5 +11,10 @@
 
    <?= $this->include('templates/css'); ?>
 
-   <title><?= $title ?></title>
+   <?php
+   /** @var string|null $title */
+   $title = $title ?? '';
+   ?>
+
+   <title><?= esc($title) ?></title>
 </head>

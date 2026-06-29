@@ -1,3 +1,14 @@
+<?php
+
+/** @var object $generalSettings */
+
+$generalSettings ??= (object)[
+    'school_name' => '',
+    'school_year' => '',
+    'copyright'  => '',
+];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 <div class="content">

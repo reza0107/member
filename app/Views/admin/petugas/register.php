@@ -1,3 +1,14 @@
+<?php
+
+use App\Libraries\enums\UserRole;
+
+/** @var UserRole[] $roles */
+/** @var array $member */
+
+$roles ??= [];
+$member ??= [];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 <div class="content">

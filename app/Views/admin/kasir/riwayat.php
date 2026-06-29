@@ -1,3 +1,10 @@
+<?php
+
+/** @var array $penjualan */
+
+$penjualan ??= [];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 
@@ -170,17 +177,48 @@
 
                                 </td>
 
-                                <td width="120">
+                                <td>
 
                                     <a
-
                                         href="<?= base_url('admin/kasir/detail/' . $row['id_penjualan']) ?>"
-
-                                        class="btn btn-info btn-sm btn-block">
+                                        class="btn btn-info btn-sm">
 
                                         Detail
 
                                     </a>
+
+                                    <a
+                                        target="_blank"
+                                        href="<?= base_url('admin/kasir/thermal/' . $row['id_penjualan']) ?>"
+                                        class="btn btn-success btn-sm">
+
+                                        <i class="material-icons">print</i>
+
+                                        Cetak
+
+                                    </a>
+
+                                    <form
+                                        action="<?= base_url('admin/kasir/delete/' . $row['id_penjualan']) ?>"
+                                        method="post"
+                                        class="d-inline">
+
+                                        <?= csrf_field() ?>
+
+                                        <input
+                                            type="hidden"
+                                            name="_method"
+                                            value="DELETE">
+
+                                        <button
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Hapus transaksi ini?')">
+
+                                            <i class="material-icons">delete</i>
+
+                                        </button>
+
+                                    </form>
 
                                 </td>
 

@@ -1,3 +1,12 @@
+<?php
+
+/** @var array $penjualan */
+/** @var array $detail */
+
+$penjualan ??= [];
+$detail ??= [];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 
@@ -227,22 +236,16 @@
 
                             </a>
 
-                            <button
-                                class="btn btn-success"
-                                onclick="window.print()">
+                            <a
+                                target="_blank"
+                                href="<?= base_url('admin/kasir/thermal/' . $penjualan['id_penjualan']) ?>"
+                                class="btn btn-success">
 
-                                <a
-                                    href="<?= base_url('admin/kasir/thermal/' . $penjualan['id_penjualan']) ?>"
-                                    target="_blank"
-                                    class="btn btn-success">
+                                <i class="material-icons">print</i>
 
-                                    <i class="material-icons">print</i>
+                                Cetak Thermal
 
-                                    Cetak Thermal
-
-                                </a>
-
-                            </button>
+                            </a>
 
                         </div>
 

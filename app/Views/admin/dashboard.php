@@ -1,3 +1,36 @@
+<?php
+
+/** @var array $member */
+/** @var array $petugas */
+/** @var array $kelas */
+/** @var array $jurusan */
+/** @var array $jumlahKehadiranmember */
+/** @var array $grafikKehadiranmember */
+/** @var array $dateRange */
+/** @var string $dateNow */
+/** @var object $generalSettings */
+
+$member ??= [];
+$petugas ??= [];
+$kelas ??= [];
+$jurusan ??= [];
+$jumlahKehadiranmember ??= [
+    'hadir' => 0,
+    'izin' => 0,
+    'sakit' => 0,
+    'alfa' => 0
+];
+
+$grafikKehadiranmember ??= [
+    'hadir' => [],
+    'izin' => [],
+    'sakit' => [],
+    'alfa' => []
+];
+
+$dateRange ??= [];
+$dateNow ??= date('d-m-Y');
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('styles') ?>
 <style>
@@ -7,7 +40,8 @@
         min-height: 250px;
     }
 
-    @media (min-width: 992px) and (max-width: 1199px) (max-width: 768px) {
+    @media (max-width:1199px) {
+
         .card-title {
             font-size: 1rem !important;
         }
@@ -36,7 +70,7 @@
         canvas {
             max-width: 100% !important;
         }
-        
+
         .card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(8px);
@@ -231,22 +265,10 @@ foreach ($member as $m) {
             </div>
             <div class="col-12 col-sm-6">
                 <div class="card">
-                    <div class="card-header card-header-info">
-                        <a href="<?= base_url('admin/kelas'); ?>" class="text-white">
-                            <div class="d-flex justify-content-end">
-                                <div class="text-right">
-                                    <p class="card-category">Kelas / Jurusan</p>
-                                    <h3 class="card-title text-nowrap">
-                                        <?= count($kelas) . ' / ' . count($jurusan); ?>
-                                    </h3>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
                     <div class="card-footer">
                         <div class="stats">
                             <i class="material-icons">home</i>
-                            <?= $generalSettings->school_name; ?>
+                            <?= esc($generalSettings->school_name ?? '-') ?>
                         </div>
                     </div>
                 </div>

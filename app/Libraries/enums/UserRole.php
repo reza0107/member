@@ -8,12 +8,14 @@ enum UserRole: int
   case SuperAdmin = 1;
   case Kepsek = 2;
   case StafPetugas = 3;
+  case Kasir = 4;
 
   public const ALL_ROLES = [
     self::Scanner,
     self::SuperAdmin,
     self::Kepsek,
     self::StafPetugas,
+    self::Kasir,
   ];
 
   public function label(): string
@@ -23,6 +25,7 @@ enum UserRole: int
       self::SuperAdmin => 'Super Admin',
       self::Kepsek => 'Kepsek',
       self::StafPetugas => 'Staf Petugas',
+      self::Kasir => 'Kasir',
     };
   }
 

@@ -1,3 +1,12 @@
+<?php
+
+/** @var array $data */
+/** @var array $oldInput */
+
+$data ??= [];
+$oldInput ??= [];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 <div class="content">

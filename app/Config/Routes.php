@@ -226,6 +226,7 @@ $routes->group('admin', ['filter' => 'login'], function (RouteCollection $routes
 
    $routes->get('kasir/detail/(:num)', 'Admin\Kasir::detail/$1');
    $routes->get('kasir/thermal/(:num)','Admin\Kasir::thermal/$1');
+   $routes->delete('kasir/delete/(:num)', 'Admin\Kasir::delete/$1');
 
    // admin buat laporan
    $routes->get('laporan', 'Admin\GenerateLaporan::index');

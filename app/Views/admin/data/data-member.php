@@ -1,3 +1,12 @@
+<?php
+
+/** @var object $generalSettings */
+
+$generalSettings ??= (object)[
+   'school_year' => '',
+];
+
+?>
 <?= $this->extend('templates/admin_page_layout') ?>
 <?= $this->section('content') ?>
 <div class="content">
@@ -77,7 +86,7 @@
          url: "<?= base_url('/admin/member'); ?>",
          type: 'post',
          data: {},
-         success: function (response, status, xhr) {
+         success: function(response, status, xhr) {
             // console.log(status);
             $('#datamember').html(response);
 
@@ -86,7 +95,7 @@
             }, 500);
             $('#refreshBtn').removeClass('active show');
          },
-         error: function (xhr, status, thrown) {
+         error: function(xhr, status, thrown) {
             console.log(thrown);
             $('#datamember').html(thrown);
             $('#refreshBtn').removeClass('active show');

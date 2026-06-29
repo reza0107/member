@@ -1,3 +1,31 @@
+<?php
+
+/** @var object $generalSettings */
+/** @var string $awal */
+/** @var string $akhir */
+/** @var array $rekap */
+
+/** @var int $totalMember */
+/** @var int|float $totalCash */
+/** @var int|float $totalQris */
+/** @var int|float $totalPendapatan */
+
+/** @var int|float $barangCash */
+/** @var int|float $barangQris */
+/** @var int|float $totalPenjualanBarang */
+
+$rekap ??= [];
+
+$totalMember ??= 0;
+$totalCash ??= 0;
+$totalQris ??= 0;
+$totalPendapatan ??= 0;
+
+$barangCash ??= 0;
+$barangQris ??= 0;
+$totalPenjualanBarang ??= 0;
+
+?>
 <?= $this->extend('templates/laporan') ?>
 
 <?= $this->section('content') ?>
